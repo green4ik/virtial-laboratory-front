@@ -1,0 +1,74 @@
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: transparent;
+    color: white;
+    position: fixed;
+    width: 97%;
+    top: 0;
+    z-index: 1000;
+  }
+  
+  .navbar .logo img {
+    height: 35px; /* Adjust logo size */
+    width: auto;
+  }
+  
+  .nav-links {
+    list-style: none;
+    display: flex;
+    gap: 15px;
+  }
+  
+  .nav-links li {
+    display: inline;
+  }
+  
+  .nav-links a {
+    text-decoration: none;
+    color: white;
+  }
+  
+  .nav-links a:hover {
+    color: #ff9f67;
+  }
+  
+  .join-button, .login-button, .nav-links a {
+    width: 100px; /* Set fixed width */
+    height: 40px; /* Set fixed height */
+    display: flex; /* Center content inside the button */
+    justify-content: center;
+    align-items: center;
+    font-weight: bold; /* Bold text */
+    font-size: 16px; /* Ensure consistent font size */
+    padding: 0; /* Remove extra padding */
+    border-radius: 10px;
+    text-align: center;
+  }
+  
+  .join-button {
+    background-color: #ff9f67;
+    color: white;
+    border: none;
+    border: 2px solid #ff9f67;
+  }
+  
+  .join-button:hover {
+    background-color: #ffffff;
+    color: #ff9f67;
+    border: 2px solid #ffffff;
+  }
+  
+  .login-button {
+    background-color: transparent;
+    color: white;
+    border: 2px solid white;
+  }
+  
+  .login-button:hover {
+    background-color: white;
+    color: black;
+  }
+  

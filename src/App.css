@@ -1,38 +1,28 @@
 .App {
   text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+  font-family: "Mulish";
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: transparent;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
+  padding-top: 60px;
+}
+
+.main-heading {
+  font-size: 4rem;
   color: white;
+  position: absolute; /* Position it relative to the viewport */
+  top: 40%; /* Move it to the center vertically */
+  left: 15%; /* Move it to the center horizontally */
+  /* transform: translate(-50%, -50%); Offset by half to center perfectly */
+  margin: 0; /* Remove default margin */
+  z-index: 10; /* Ensure it stays above other elements */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Add subtle shadow for better visibility */
 }
 
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
