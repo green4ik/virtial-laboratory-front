@@ -1,0 +1,133 @@
+.complete-task-body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', 'Mulish'
+      sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+      background-image: url('./images/image2.png');
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      min-height: 100vh;
+  }
+  .container {
+    display: flex;
+    height: 100vh;
+    background: linear-gradient(180deg, #6a8dfd, #ca7df9);
+    color: white;
+  }
+  
+  .left-panel {
+    width: 20%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    justify-content: space-between;
+  }
+  .left-panel-variables {
+    width: 100%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    /* align-items: flex-start; */
+    gap: 10px;
+  }
+  .left-panel h3 {
+    font-size: 18px;
+    margin-bottom: 20px;
+    align-self: center;
+  }
+  
+  .left-panel button {
+    background-color: white;
+    color: #6a8dfd;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    width: 100%;
+    text-align: left;
+  }
+  
+  .left-panel button:hover {
+    background-color: #ddd;
+  }
+  
+  .new-block-btn {
+    margin-top: 20px;
+    align-self: center;
+  }
+  
+  .uml-panel {
+    width: 60%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .uml-block {
+    background-color: white;
+    color: black;
+    width: 200px;
+    text-align: center;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+  
+  .class-title {
+    font-weight: bold;
+    font-size: 18px;
+    background-color: #f0f0f0;
+    padding: 10px;
+  }
+  
+  .class-attributes,
+  .class-methods {
+    padding: 10px;
+  }
+  
+  .right-panel {
+    width: 20%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  
+  .timer {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    align-self: flex-end;
+  }
+  
+  .right-panel h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+  
+  .right-panel p {
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 30px;
+  }
+  
+  .submit-btn {
+    background-color: orange;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    align-self: center;
+  }
+  
+  .submit-btn:hover {
+    background-color: #ff7f00;
+  }
