@@ -4,7 +4,7 @@ import "@fontsource/mulish";
 import Navbar from './Navbar';
 
 
-function App() {
+function MainPage() {
   return (
     <div className="App">
         <Navbar />
@@ -18,4 +18,4 @@ function App() {
   );
 }
 
-export default App;
+export default MainPage;
