@@ -1,5 +1,6 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import "./CompleteTask.css";
+import { useNavigate } from "react-router-dom";
 import LeftPanelVaribales from "./LeftPanelVariables";
 import LeftPanelMethods from "./LeftPanelMethods";
 import LeftPanelClasses from "./LeftPannelClasses";
@@ -11,6 +12,8 @@ function CompleteTask() {
   const [variables, setVariables] = useState(["Var1", "Var2", "Var3"]);
   const [methods, setMethods] = useState(["Method1", "Method2", "Method3"]);
   const [classes, setClasses] = useState(["Class1", "Class2", "Class3"]);
+  const [isRightPanelVisible, setIsRightPanelVisible] = useState(true);
+
 
   const [activePanel, setActivePanel] = useState("Variables");
   const [umlBlocks, setUmlBlocks] = useState([]);
@@ -89,6 +92,43 @@ function CompleteTask() {
       })
     );
   };
+
+  // Timer state
+  const [timeLeft, setTimeLeft] = useState(
+    parseInt(currentTaskData[0].timeToComplete) * 60 // Convert minutes to seconds
+  );
+
+  // Timer countdown logic
+  useEffect(() => {
+    if (timeLeft > 0) {
+      const timer = setInterval(() => {
+        setTimeLeft((prevTime) => prevTime - 1);
+      }, 1000);
+      return () => clearInterval(timer); // Clean up on unmount
+    } else if (timeLeft === 0) {
+      // Time is up: show popup and submit task
+      alert("Time is up!");
+      SubmitTask();
+    }
+  }, [timeLeft]);
+
+  const SubmitTask = () => {
+    console.log("Task is submitted.");
+      alert("Task was automatically submitted because time is up.");
+      navigate("/home");
+  };
+
+  // Format time to mm:ss
+  const formatTime = (time) => {
+    const minutes = Math.floor(time / 60);
+    const seconds = time % 60;
+    return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+  };
+
+  const toggleRightPanel = () => {
+    setIsRightPanelVisible((prevState) => !prevState);
+  };
+    
 
   const handleContextMenu = (e, blockId, subItem = null) => {
     e.preventDefault();

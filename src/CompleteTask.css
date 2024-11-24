@@ -95,11 +95,13 @@
     background-color: #FF9F67;
   }
   .uml-panel {
+    flex-grow: 1; 
     width: 60%;
     display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
+    transition: width 0.3s ease;
   }
   
   .uml-block {
@@ -133,31 +135,73 @@
   }
   
   .right-panel {
-    width: 20%;
+    font-family: 'Mulish';
+    width: 15%;
     padding: 20px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: flex-start; /* Aligns content at the top */
     align-items: flex-start;
     border-left: 0.1vh solid white;
+    height: 95.5%;
+    transition: width 0.3s ease; /* Ensures the panel fills the container height */
+  }
+
+  .right-panel.hidden {
+    display: none; /* Hides the right panel when closed */
+  }
+ 
+  .right-panel h3 {
+    color: black;
+    /* font-size: 20px; */
+    margin-bottom: 0; /* Removes bottom margin */
+  }
+  
+  .right-panel p {
+    color: black;
+    font-size: 18px;
+    line-height: 1.5;
+    margin-top: 20px; /* Removes top margin to pull closer to the name */
+    margin-bottom: 50px; /* Adds space after the description */
+    
+  }
+
+  .toggle-right-panel-btn {
+    background-color: #FF9F67;
+    color: white;
+    font-size: 5px;
+    width:20px;
+    height: 20px;
+    border: none;
+    padding: 1px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin: auto;
+    margin-right: 0px;
+  }
+  
+  .toggle-right-panel-btn:hover {
+    background-color: #ff7f00;
+  }
+  
+  .always-visible-panel {
+    position: fixed;
+    z-index: 1000;
+    height: 98%;
+    top: 20px; /* Position timer 20px from top */
+    right: 20px; /* Position both elements 20px from the right */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end; /* Align items to the right */
+    justify-content: flex-start; /* Start with the timer at the top */
   }
   
   .timer {
     font-size: 18px;
     font-weight: bold;
-    margin-bottom: 10px;
-    align-self: flex-end;
-  }
-  
-  .right-panel h3 {
-    font-size: 20px;
-    margin-bottom: 10px;
-  }
-  
-  .right-panel p {
-    font-size: 14px;
-    line-height: 1.5;
-    margin-bottom: 30px;
+    margin-bottom: 10px; /* Adds space below the timer */
+    margin-right: 60px;
   }
   
   .submit-btn {
@@ -168,12 +212,15 @@
     border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
-    align-self: center;
+    margin-right: 60px;
+    margin-top: auto; /* Push the submit button to the bottom */
+    margin-bottom: 25px; /* 25px from the bottom */
   }
   
   .submit-btn:hover {
     background-color: #ff7f00;
   }
+  
   .context-menu {
     position: absolute;
     background-color: transparent;
