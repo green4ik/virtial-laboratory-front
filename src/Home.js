@@ -6,9 +6,10 @@ import list from './images/list.png';
 import search from './images/search.png';
 import lines from './images/lines.png';
 import taskimg from './images/task-img.png';
+import TaskButton from './TaskButton';
 import { Link } from 'react-router-dom';
 
-function Home() {
+function Home({tasks}) {
   const [activeTab, setActiveTab] = useState('tasks'); // Default to 'tasks'
   const [selectedTask, setSelectedTask] = useState(null); // Track selected task
   const [currentPage, setCurrentPage] = useState(1); // Track the current page
@@ -259,7 +260,8 @@ function Home() {
             <button className="close-button" onClick={() => setSelectedTask(null)}>
                 Close
             </button>
-            <button className="start-task-button">Start Task</button>
+            {/* <button className="start-task-button">Start Task</button> */}
+            <TaskButton task={selectedTask} />
         </div>
     </div>
 )}

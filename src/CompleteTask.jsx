@@ -1,39 +1,75 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./CompleteTask.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import LeftPanelVaribales from "./LeftPanelVariables";
 import LeftPanelMethods from "./LeftPanelMethods";
 import LeftPanelClasses from "./LeftPannelClasses";
 import Draggable from "react-draggable";
 
 function CompleteTask() {
-  const [variables, setVariables] = useState(["Var1", "Var2", "Var3"]);
-  const [methods, setMethods] = useState(["Method1", "Method2", "Method3"]);
-  const [classes, setClasses] = useState(["Class1", "Class2", "Class3"]);
+  const [variables, setVariables] = useState([]);
+  const [methods, setMethods] = useState([]);
+  const [classes, setClasses] = useState([]);
   const [isRightPanelVisible, setIsRightPanelVisible] = useState(true);
 
 
   const [activePanel, setActivePanel] = useState("Variables");
 
-  const [umlBlocks, setUmlBlocks] = useState([]);
+  const [umlBlocks, setUmlBlocks] = useState(() => {
+    // Retrieve saved UML blocks from localStorage or initialize as empty array
+    const savedBlocks = localStorage.getItem("umlBlocks");
+    return savedBlocks ? JSON.parse(savedBlocks) : [];
+  });
+  
+    useEffect(() => {
+    // Save UML blocks to localStorage whenever they change
+    localStorage.setItem("umlBlocks", JSON.stringify(umlBlocks));
+  }, [umlBlocks]);
+
   const umlPanelRef = useRef(null);
+
+  const location = useLocation();
+  const { task } = location.state;
 
   const navigate = useNavigate();
 
-  const currentTaskData = [
-    {
-      id: 1,
-      name: 'Make UML',
-      deadline: '01.12.2024',
-      maxMark: 10,
-      description: 'This is a first task to get introduced with UML modeling of different things with some random description in it to not leave empty space and fill this page with text to demonstrate this to everyone.',
-      timeToComplete: 30,
-      studentId: 101, 
-      isDone: false,
-      mark: null, 
-      comment: 'Good effort, but needs improvement in diagram accuracy.',
-    },
-  ];
+
+  useEffect(() => {
+    const fetchDiagram = async () => {
+      try {
+        const response = await fetch(
+          `https://localhost:7217/api/StarterDiagram/${task.diagramId}`
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch diagram data");
+        }
+        const diagram = await response.json();
+        // Update the states with fetched diagram data
+        setVariables(diagram.attributes || []);
+        setMethods(diagram.methods || []);
+        setClasses(diagram.classNames || []);
+      } catch (error) {
+        console.error("Error fetching diagram data:", error);
+      }
+    };
+
+    fetchDiagram();
+  }, [task.diagramId]);
+  
+  // [
+  //   {
+  //     id: 1,
+  //     name: 'Make UML',
+  //     deadline: '01.12.2024',
+  //     maxMark: 10,
+  //     description: 'This is a first task to get introduced with UML modeling of different things with some random description in it to not leave empty space and fill this page with text to demonstrate this to everyone.',
+  //     timeToComplete: 30,
+  //     studentId: 101, 
+  //     isDone: false,
+  //     mark: null, 
+  //     comment: 'Good effort, but needs improvement in diagram accuracy.',
+  //   },
+  // ];
 
   const addNewBlock = () => {
     setUmlBlocks([
@@ -104,12 +140,18 @@ function CompleteTask() {
   };
 
   // Timer state
-  const [timeLeft, setTimeLeft] = useState(
-    parseInt(currentTaskData[0].timeToComplete) * 60 // Convert minutes to seconds
-  );
-
+  const [timeLeft, setTimeLeft] = useState(() => {
+    // Retrieve the timer value from localStorage or initialize it
+    const savedTime = localStorage.getItem("timeLeft");
+    return savedTime ? parseInt(savedTime, 10) : parseInt(task.durationTime) * 60; // Default to task duration in seconds
+  });
+  
   // Timer countdown logic
   useEffect(() => {
+    // Save the timeLeft to localStorage whenever it changes
+    localStorage.setItem("timeLeft", timeLeft);
+  
+    // Timer countdown logic
     if (timeLeft > 0) {
       const timer = setInterval(() => {
         setTimeLeft((prevTime) => prevTime - 1);
@@ -121,11 +163,13 @@ function CompleteTask() {
       SubmitTask();
     }
   }, [timeLeft]);
-
+  
+  // Clear the timer from localStorage when task is submitted
   const SubmitTask = () => {
+    localStorage.removeItem("timeLeft");
     console.log("Task is submitted.");
-      alert("Task was automatically submitted because time is up.");
-      navigate("/home");
+    alert("Task was submitted.");
+    navigate("/home");
   };
 
   // Format time to mm:ss
@@ -262,11 +306,11 @@ function CompleteTask() {
         </button>
 
         <div className={`right-panel ${!isRightPanelVisible ? 'hidden' : ''}`}>
-          {isRightPanelVisible && currentTaskData.length > 0 && (
+          {isRightPanelVisible && (
             <>
               <br/><br/>
-              <h3>{currentTaskData[0].name}</h3>
-              <p>{currentTaskData[0].description}</p>
+              <h3>{task.name}</h3>
+              <p>{task.description}</p>
             </>
           )}
         </div>
