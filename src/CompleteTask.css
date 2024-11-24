@@ -20,53 +20,82 @@
   
   .left-panel {
     width: 20%;
-    padding: 20px;
+    padding: 2vh;
+    padding-right: 0; 
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 10px;
-    justify-content: space-between;
+    gap: 2%;
+    border-right: 0.1vh solid white;
+    /* justify-content: space-between; */
   }
   .left-panel-variables {
-    width: 100%;
-    padding: 20px;
+    /* width: 80%; */
+    padding: 0vh;
     display: flex;
     flex-direction: column;
+    height: 100%;
     /* align-items: flex-start; */
-    gap: 10px;
+    gap: 2%;
+  }
+  .left-panel-headers {
+    display: flex;
+    flex-direction: row;
+    gap: 2%;
+  }
+  .left-panel-header:hover {
+    cursor: pointer;
+
+  }
+  .left-panel-header-active {
+    color: #44DCED;
   }
   .left-panel h3 {
-    font-size: 18px;
-    margin-bottom: 20px;
+    font-size: 1.8vh;
+    margin-bottom: 2vh;
     align-self: center;
   }
   
-  .left-panel button {
-    background-color: white;
-    color: #6a8dfd;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
+  .left-panel-button {
+    background-color: transparent;
+    border: 1px solid black;
+    color: white;
+    /* border: none; */
+    padding: 1vh 2vh;
+    border-radius: 0.5vh;
     cursor: pointer;
-    font-size: 14px;
-    width: 100%;
-    text-align: left;
+    font-size: 1.4vh;
+    width: 25vh;
+    text-align: center;
+    align-self: center;
   }
   
-  .left-panel button:hover {
-    background-color: #ddd;
+  .left-panel-button:hover {
+    background-color: #FF9F67;
+    
   }
   
   .new-block-btn {
-    margin-top: 20px;
+    margin-top: 2vh;
+    color:black;
+    border: 1px solid black;
+    /* padding: 1vh 2vh; */
+    border-radius: 0.5vh;
+    cursor: pointer;
+    font-size: 3vh;
+    width: 25vh;
+    height: 10vh;
     align-self: center;
   }
-  
+  .new-block-btn:hover {
+    background-color: #FF9F67;
+  }
   .uml-panel {
     width: 60%;
     display: flex;
     justify-content: center;
     align-items: center;
+    position: relative;
   }
   
   .uml-block {
@@ -76,8 +105,15 @@
     text-align: center;
     border: 1px solid #ddd;
     border-radius: 5px;
+    position: absolute;
   }
-  
+  .uml-block:hover {
+    cursor: pointer;
+  }
+  .uml-block:hover:active {
+    cursor: move;
+    z-index: 10;
+  }
   .class-title {
     font-weight: bold;
     font-size: 18px;
@@ -97,6 +133,7 @@
     flex-direction: column;
     justify-content: space-between;
     align-items: flex-start;
+    border-left: 0.1vh solid white;
   }
   
   .timer {
