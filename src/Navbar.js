@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom'; // Використовуємо Link
 import './Navbar.css';
 import logo from './images/logo_courses.png';
 
@@ -6,14 +7,14 @@ function Navbar() {
   return (
     <nav className="navbar">
       <div className="logo">
-        <img src={logo} alt="Courses" />
+      <Link to="/" className="nav-button"><img src={logo} alt="Courses" /></Link>
       </div>
 
       <ul className="nav-links">
-        <li><a href="#home" className="nav-button">Home</a></li>
-        <li><a href="#modules" className="nav-button">Modules</a></li>
-        <li><a href="#join" className="join-button">Join</a></li>
-        <li><a href="#login" className="login-button">Log In</a></li>
+        <li><Link to="/home" className="nav-button">Home</Link></li>
+        <li><Link to="/modules" className="nav-button">Modules</Link></li>
+        <li><Link to="/join" className="join-button">Join</Link></li>
+        <li><Link to="/login" className="login-button">Log In</Link></li>
       </ul>
     </nav>
   );
