@@ -14,7 +14,11 @@ function CompleteTask() {
   const [classes, setClasses] = useState(["Class1", "Class2", "Class3"]);
   const [isRightPanelVisible, setIsRightPanelVisible] = useState(true);
 
-
+  const [connections, setConnections] = useState([]);
+  const [isDrawing, setIsDrawing] = useState(false);
+  const [startPointId, setStartPointId] = useState(null);
+  const [blockStartPointId, setBlockStartPointId] = useState(null);
+  const [anchorPoint, setAnchorPoint] = useState(null);
   const [activePanel, setActivePanel] = useState("Variables");
   const [umlBlocks, setUmlBlocks] = useState([]);
   const umlPanelRef = useRef(null);
@@ -28,7 +32,28 @@ function CompleteTask() {
     in: 1
   });
   const navigate = useNavigate();
+ 
+  useEffect(() => {
+    // Функція для отримання даних з API
+    const fetchData = async () => {
+      try {
+        const response = await fetch("https://localhost:7217/api/StarterDiagram/1");
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
 
+        // Оновлення станів на основі отриманих даних
+        setVariables(data.attributes || []);
+        setMethods(data.methods || []);
+        setClasses(data.classNames || []);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData(); // Викликаємо функцію
+  }, []);
   const currentTaskData = [
     {
       id: 1,
@@ -43,10 +68,7 @@ function CompleteTask() {
       comment: 'Good effort, but needs improvement in diagram accuracy.',
     },
   ];
-  const [connections, setConnections] = useState([]);
-  const [isDrawing, setIsDrawing] = useState(false);
-  const [startPointId, setStartPointId] = useState(null);
-  const [anchorPoint, setAnchorPoint] = useState(null);
+  
   
   const block = umlBlocks.find((b) => b.id === contextMenu.blockId);
   const updateXarrow = useXarrow();
@@ -178,16 +200,17 @@ function CompleteTask() {
     setContextMenu({ visible: false, x: 0, y: 0, blockId: null, arrowIndex: null });
   };
 
-  const handleStartArrow = (pointId) => {
+  const handleStartArrow = (pointId,blockId) => {
     setIsDrawing(true);
     setStartPointId(pointId);
+    setBlockStartPointId(blockId);
     
   };
 
-  const handleEndArrow = (pointId,endpos) => {
+  const handleEndArrow = (pointId,endpos,bend) => {
     
     if (isDrawing && startPointId && (startPointId !== pointId) && endpos) {
-      setConnections([...connections, { start: startPointId, end: pointId, endAnchor: endpos,label:"none" }]);
+      setConnections([...connections, { start: startPointId, end: pointId, endAnchor: endpos,label:"none",bstart:blockStartPointId,bend:bend }]);
     }
     setIsDrawing(false);
     setStartPointId(null);
@@ -217,16 +240,6 @@ function CompleteTask() {
     closeContextMenu();
   };
   
-  const handleChangeArrowType = (newArrowType) => {
-    setConnections((prevConnections) =>
-      prevConnections.map((connection, index) =>
-        index === contextMenu.arrowIndex
-          ? { ...connection, type: newArrowType }
-          : connection
-      )
-    );
-    closeContextMenu();
-  };
   
   const handleDeleteArrow = () => {
     setConnections((prevConnections) =>
@@ -270,8 +283,47 @@ function CompleteTask() {
     );
     closeContextMenu();
   };
+
+  useEffect(() => {
+    const updatedJson = generateUmlJson();
+    console.log("Updated UML JSON:", JSON.stringify(updatedJson, null, 2));
+    // Якщо потрібно передавати дані на сервер, можна зробити POST-запит тут
+  }, [umlBlocks, connections]);
+  const generateUmlJson = () => {
+    console.log("UML Blocks:", umlBlocks);
+    console.log("Connections:", connections);
+    return {
+      id: 1,
+      classes: umlBlocks.map((block) => ({
+        id : block.id,
+        name: block.title || "Unnamed",
+        attributes: block.attributes,
+        methods: block.methods,
+        relatedClasses: connections
+          .filter((conn) => conn.bstart == block.id)
+          .map((conn) => ({
+            [umlBlocks.find((block)=>(block.id == conn.bend)).title]: conn.label,               // Тип зв'язку
+          })),
+      })),
+    };
+  };
+  const downloadJson = () => {
+    const data = generateUmlJson();
+    const jsonBlob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(jsonBlob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "uml-diagram.json";
+    a.click();
+  };
+
+
   return (
     <div className="complete-task-body" onClick={closeContextMenu}>
+
+<button onClick={downloadJson} className="export-json-btn">
+    Export JSON
+  </button>
       <div className="container">
         <div className="left-panel">
           <div className="left-panel-headers">
@@ -424,37 +476,37 @@ function CompleteTask() {
                       id={`point-${block.id}-top`}
                       className="point top"
                       onMouseDown={() =>
-                        handleStartArrow(`point-${block.id}-top`)
+                        handleStartArrow(`point-${block.id}-top`,block.id)
                       }
-                      onMouseUp={() => handleEndArrow(`point-${block.id}-top`,"top")}
+                      onMouseUp={() => handleEndArrow(`point-${block.id}-top`,"top",block.id)}
                     />
                     <div
                       id={`point-${block.id}-right`}
                       className="point right"
                       onMouseDown={() =>
-                        handleStartArrow(`point-${block.id}-right`)
+                        handleStartArrow(`point-${block.id}-right`,block.id)
                       }
                       onMouseUp={() =>
-                        handleEndArrow(`point-${block.id}-right`,"right")
+                        handleEndArrow(`point-${block.id}-right`,"right",block.id)
                       }
                     />
                     <div
                       id={`point-${block.id}-bottom`}
                       className="point bottom"
                       onMouseDown={() =>
-                        handleStartArrow(`point-${block.id}-bottom`)
+                        handleStartArrow(`point-${block.id}-bottom`,block.id)
                       }
                       onMouseUp={() =>
-                        handleEndArrow(`point-${block.id}-bottom`,"bottom")
+                        handleEndArrow(`point-${block.id}-bottom`,"bottom",block.id)
                       }
                     />
                     <div
                       id={`point-${block.id}-left`}
                       className="point left"
                       onMouseDown={() =>
-                        handleStartArrow(`point-${block.id}-left`)
+                        handleStartArrow(`point-${block.id}-left`,block.id)
                       }
-                      onMouseUp={() => handleEndArrow(`point-${block.id}-left`,"left")}
+                      onMouseUp={() => handleEndArrow(`point-${block.id}-left`,"left",block.id)}
                     />
                   </div>
                 </div>
@@ -497,12 +549,13 @@ function CompleteTask() {
               <br/><br/>
               <h3>{currentTaskData[0].name}</h3>
               <p>{currentTaskData[0].description}</p>
+              <button className="submit-btn" onClick={SubmitTask}>Submit task</button>
             </>
           )}
         </div>
         <div className="always-visible-panel">
         <div className="timer">Time left: {formatTime(timeLeft)}</div>
-        <button className="submit-btn" onClick={SubmitTask}>Submit task</button>
+        
       </div>
       </div>
 
@@ -519,22 +572,22 @@ function CompleteTask() {
         <button onClick={() => handleChangeArrowLabel('Association')}>
           Association
         </button>
-        <button onClick={() => handleChangeArrowLabel('Dependency')}>
+        <button onClick={() => handleChangeArrowLabel('Navigable association')}>
           Navigable association
         </button>
-        <button onClick={() => handleChangeArrowLabel('Aggregation')}>
+        <button onClick={() => handleChangeArrowLabel('Inheritance')}>
           Inheritance
         </button>
-        <button onClick={() => handleChangeArrowLabel('Aggregation')}>
+        <button onClick={() => handleChangeArrowLabel('Implementaion')}>
           Implementaion
         </button>
-        <button onClick={() => handleChangeArrowLabel('Aggregation')}>
+        <button onClick={() => handleChangeArrowLabel('Dependency')}>
           Dependency
         </button>
         <button onClick={() => handleChangeArrowLabel('Aggregation')}>
           Aggregation
         </button>
-        <button onClick={() => handleChangeArrowLabel('Aggregation')}>
+        <button onClick={() => handleChangeArrowLabel('Composition')}>
           Composition
         </button>
       </div>
