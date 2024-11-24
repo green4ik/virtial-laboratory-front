@@ -1,5 +1,6 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import "./CompleteTask.css";
+import { useNavigate } from "react-router-dom";
 import LeftPanelVaribales from "./LeftPanelVariables";
 import LeftPanelMethods from "./LeftPanelMethods";
 import LeftPanelClasses from "./LeftPannelClasses";
@@ -9,11 +10,30 @@ function CompleteTask() {
   const [variables, setVariables] = useState(["Var1", "Var2", "Var3"]);
   const [methods, setMethods] = useState(["Method1", "Method2", "Method3"]);
   const [classes, setClasses] = useState(["Class1", "Class2", "Class3"]);
+  const [isRightPanelVisible, setIsRightPanelVisible] = useState(true);
+
 
   const [activePanel, setActivePanel] = useState("Variables");
 
   const [umlBlocks, setUmlBlocks] = useState([]);
   const umlPanelRef = useRef(null);
+
+  const navigate = useNavigate();
+
+  const currentTaskData = [
+    {
+      id: 1,
+      name: 'Make UML',
+      deadline: '01.12.2024',
+      maxMark: 10,
+      description: 'This is a first task to get introduced with UML modeling of different things with some random description in it to not leave empty space and fill this page with text to demonstrate this to everyone.',
+      timeToComplete: 30,
+      studentId: 101, 
+      isDone: false,
+      mark: null, 
+      comment: 'Good effort, but needs improvement in diagram accuracy.',
+    },
+  ];
 
   const addNewBlock = () => {
     setUmlBlocks([
@@ -83,6 +103,42 @@ function CompleteTask() {
     );
   };
 
+  // Timer state
+  const [timeLeft, setTimeLeft] = useState(
+    parseInt(currentTaskData[0].timeToComplete) * 60 // Convert minutes to seconds
+  );
+
+  // Timer countdown logic
+  useEffect(() => {
+    if (timeLeft > 0) {
+      const timer = setInterval(() => {
+        setTimeLeft((prevTime) => prevTime - 1);
+      }, 1000);
+      return () => clearInterval(timer); // Clean up on unmount
+    } else if (timeLeft === 0) {
+      // Time is up: show popup and submit task
+      alert("Time is up!");
+      SubmitTask();
+    }
+  }, [timeLeft]);
+
+  const SubmitTask = () => {
+    console.log("Task is submitted.");
+      alert("Task was automatically submitted because time is up.");
+      navigate("/home");
+  };
+
+  // Format time to mm:ss
+  const formatTime = (time) => {
+    const minutes = Math.floor(time / 60);
+    const seconds = time % 60;
+    return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+  };
+
+  const toggleRightPanel = () => {
+    setIsRightPanelVisible((prevState) => !prevState);
+  };
+    
   return (
     <div className="complete-task-body">
       <div className="container">
@@ -201,17 +257,25 @@ function CompleteTask() {
           ))}
         </div>
 
-        <div className="right-panel">
-          <div className="timer">Time left: 27:35</div>
-          <h3>Task 1: Make UML</h3>
-          <p>
-            This is a first task to get introduced with UML modeling of
-            different things with some random description in it to not leave
-            empty space and fill this page with text to demonstrate this to
-            everyone.
-          </p>
-          <button className="submit-btn">Submit task</button>
+        <button className="toggle-right-panel-btn" onClick={toggleRightPanel}>
+          {isRightPanelVisible ? ">>" : "<<"}
+        </button>
+
+        <div className={`right-panel ${!isRightPanelVisible ? 'hidden' : ''}`}>
+          {isRightPanelVisible && currentTaskData.length > 0 && (
+            <>
+              <br/><br/>
+              <h3>{currentTaskData[0].name}</h3>
+              <p>{currentTaskData[0].description}</p>
+            </>
+          )}
         </div>
+        </div>
+
+      {/* Always visible timer and submit button */}
+      <div className="always-visible-panel">
+        <div className="timer">Time left: {formatTime(timeLeft)}</div>
+        <button className="submit-btn" onClick={SubmitTask}>Submit task</button>
       </div>
     </div>
   );
