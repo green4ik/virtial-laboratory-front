@@ -110,18 +110,28 @@ function Home() {
   // ];
 
       // Calculate total pages
-      const totalPages = Math.ceil(taskData.length / tasksPerPage);
+      
+      const filteredData = activeTab === 'tasks' 
+      ? taskData 
+      : taskData.filter(task => task.isDone);
 
-      // Get tasks for the current page
-      const currentTasks = taskData.slice(
-        (currentPage - 1) * tasksPerPage,
-        currentPage * tasksPerPage
-      );
+    const totalPages = Math.ceil(filteredData.length / tasksPerPage);
 
-      // Handle pagination button click
-      const handlePageChange = (pageNumber) => {
-        setCurrentPage(pageNumber);
-      };
+    // Get data for the current page
+    const currentData = filteredData.slice(
+      (currentPage - 1) * tasksPerPage,
+      currentPage * tasksPerPage
+    );
+
+    // Handle pagination
+    const handlePageChange = (pageNumber) => {
+      setCurrentPage(pageNumber);
+    };
+
+    // Reset pagination when switching tabs
+    useEffect(() => {
+      setCurrentPage(1);
+    }, [activeTab]);
 
   return (
     <div className="App">
@@ -159,73 +169,33 @@ function Home() {
 
         {/* Dynamic Content */}
         <div className="tasks-container">
-          {currentTasks.length > 0 ? (
-            activeTab === 'tasks' &&
-            currentTasks.map((task) => (
+          {currentData.length > 0 ? (
+            currentData.map(item => (
               <div
-                className={`task-card ${selectedTask && selectedTask.id === task.id ? 'selected-task' : ''}`}
-                key={task.id}
-                onClick={() => setSelectedTask(task)} // Select the clicked task
+                className={`task-card ${selectedTask && selectedTask.id === item.id ? 'selected-task' : ''}`}
+                key={item.id}
+                onClick={() => setSelectedTask(item)}
               >
-                <span className="task-name">{task.name}</span>
+                <span className="task-name">{item.name}</span>
                 <div className="task-details">
-                  {task.isDone ? (
-                    <span className="task-status">Done!</span>
+                  {activeTab === 'tasks' ? (
+                    item.isDone ? (
+                      <span className="task-status">Done!</span>
+                    ) : (
+                      <span className="task-deadline">Up to: {formatDate(item.deadline)}</span>
+                    )
                   ) : (
-                    <span className="task-deadline">Up to: {formatDate(task.deadline)}</span>
+                    <div className="mark-circle">
+                      <strong>{item.mark}</strong>
+                    </div>
                   )}
                   <img src={list} alt="list" className="illustration" />
                 </div>
               </div>
             ))
           ) : (
-            <p>No tasks available</p>
+            <p>No {activeTab === 'tasks' ? 'tasks' : 'grades'} available</p>
           )}
-
-
-
-    {activeTab === 'rates' &&
-      currentTasks
-        .filter((rate) => rate.isDone) // Only include tasks that are done
-        .map((rate) => {
-          const maxMark = rate.maxGrade || 10; // Use task-specific maxMark, default to 10
-          const range = maxMark / 4; // Calculate range dynamically for each task
-
-          // Determine the grade and the color class
-          const grade = rate.grade; // Grade is only relevant if the task is done
-          const moreThen100 = rate.grade >= 100
-            ? 'task-mark100'
-            : 'task-mark';
-
-          const markClass =
-            rate.grade > maxMark - range
-              ? 'mark-circle-green' // Top range (green)
-              : rate.grade > maxMark - 2 * range
-              ? 'mark-circle-yellow' // Second range (yellow)
-              : rate.grade > maxMark - 3 * range
-              ? 'mark-circle-orange' // Third range (orange)
-              : rate.grade > 0
-              ? 'mark-circle-red' // Fourth range (red)
-              : 'mark-circle-dark-red';
-
-          return (
-            <div
-              className={`task-card ${selectedTask && selectedTask.id === rate.id ? 'selected-task' : ''}`}
-              key={rate.id}
-              onClick={() => setSelectedTask(rate)}
-            >
-              <span className="task-name">{rate.name}</span>
-              <div className="task-details">
-                <div className={`mark-circle ${markClass}`}>
-                  <span className={`${moreThen100}`}>
-                    <strong>{grade}</strong>
-                  </span>
-                </div>
-                <img src={list} alt="list" className="illustration" />
-              </div>
-            </div>
-          );
-        })}
         </div>
 
         {/* Pagination */}
