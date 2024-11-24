@@ -1,0 +1,217 @@
+.complete-task-body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', 'Mulish'
+      sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+      background-image: url('./images/image2.png');
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      min-height: 100vh;
+  }
+  .container {
+    display: flex;
+    height: 100vh;
+    background: linear-gradient(180deg, #6a8dfd, #ca7df9);
+    color: white;
+  }
+  
+  .left-panel {
+    width: 20%;
+    padding: 2vh;
+    padding-right: 0; 
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2%;
+    border-right: 0.1vh solid white;
+    /* justify-content: space-between; */
+  }
+  .left-panel-variables {
+    /* width: 80%; */
+    padding: 0vh;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    /* align-items: flex-start; */
+    gap: 2%;
+  }
+  .left-panel-headers {
+    display: flex;
+    flex-direction: row;
+    gap: 2%;
+  }
+  .left-panel-header:hover {
+    cursor: pointer;
+
+  }
+  .left-panel-header-active {
+    color: #44DCED;
+  }
+  .left-panel h3 {
+    font-size: 1.8vh;
+    margin-bottom: 2vh;
+    align-self: center;
+  }
+  
+  .left-panel-button {
+    background-color: transparent;
+    border: 1px solid black;
+    color: white;
+    /* border: none; */
+    padding: 1vh 2vh;
+    border-radius: 0.5vh;
+    cursor: pointer;
+    font-size: 1.4vh;
+    width: 25vh;
+    text-align: center;
+    align-self: center;
+  }
+  
+  .left-panel-button:hover {
+    background-color: #FF9F67;
+    
+  }
+  
+  .new-block-btn {
+    margin-top: 2vh;
+    color:black;
+    border: 1px solid black;
+    /* padding: 1vh 2vh; */
+    border-radius: 0.5vh;
+    cursor: pointer;
+    font-size: 3vh;
+    width: 25vh;
+    height: 10vh;
+    align-self: center;
+  }
+  .new-block-btn:hover {
+    background-color: #FF9F67;
+  }
+  .uml-panel {
+    flex-grow: 1; 
+    width: 60%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    transition: width 0.3s ease;
+  }
+  
+  .uml-block {
+    background-color: white;
+    color: black;
+    width: 200px;
+    text-align: center;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    position: absolute;
+  }
+  .uml-block:hover {
+    cursor: pointer;
+  }
+  .uml-block:hover:active {
+    cursor: move;
+    z-index: 10;
+  }
+  .class-title {
+    font-weight: bold;
+    font-size: 18px;
+    background-color: #f0f0f0;
+    padding: 10px;
+  }
+  
+  .class-attributes,
+  .class-methods {
+    padding: 10px;
+  }
+  
+  .right-panel {
+    font-family: 'Mulish';
+    width: 15%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* Aligns content at the top */
+    align-items: flex-start;
+    border-left: 0.1vh solid white;
+    height: 95.5%;
+    transition: width 0.3s ease; /* Ensures the panel fills the container height */
+  }
+
+  .right-panel.hidden {
+    display: none; /* Hides the right panel when closed */
+  }
+ 
+  .right-panel h3 {
+    color: black;
+    /* font-size: 20px; */
+    margin-bottom: 0; /* Removes bottom margin */
+  }
+  
+  .right-panel p {
+    color: black;
+    font-size: 18px;
+    line-height: 1.5;
+    margin-top: 20px; /* Removes top margin to pull closer to the name */
+    margin-bottom: 50px; /* Adds space after the description */
+    
+  }
+
+  .toggle-right-panel-btn {
+    background-color: #FF9F67;
+    color: white;
+    font-size: 5px;
+    width:20px;
+    height: 20px;
+    border: none;
+    padding: 1px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin: auto;
+    margin-right: 0px;
+  }
+  
+  .toggle-right-panel-btn:hover {
+    background-color: #ff7f00;
+  }
+  
+  .always-visible-panel {
+    position: fixed;
+    z-index: 1000;
+    height: 98%;
+    top: 20px; /* Position timer 20px from top */
+    right: 20px; /* Position both elements 20px from the right */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end; /* Align items to the right */
+    justify-content: flex-start; /* Start with the timer at the top */
+  }
+  
+  .timer {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px; /* Adds space below the timer */
+    margin-right: 60px;
+  }
+  
+  .submit-btn {
+    background-color: orange;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-right: 60px;
+    margin-top: auto; /* Push the submit button to the bottom */
+    margin-bottom: 25px; /* 25px from the bottom */
+  }
+  
+  .submit-btn:hover {
+    background-color: #ff7f00;
+  }
+  
