@@ -27,7 +27,22 @@ function CompleteTask() {
     subItem: null,
     in: 1
   });
+  const navigate = useNavigate();
 
+  const currentTaskData = [
+    {
+      id: 1,
+      name: 'Make UML',
+      deadline: '01.12.2024',
+      maxMark: 10,
+      description: 'This is a first task to get introduced with UML modeling of different things with some random description in it to not leave empty space and fill this page with text to demonstrate this to everyone.',
+      timeToComplete: 30,
+      studentId: 101, 
+      isDone: false,
+      mark: null, 
+      comment: 'Good effort, but needs improvement in diagram accuracy.',
+    },
+  ];
   const [connections, setConnections] = useState([]);
   const [isDrawing, setIsDrawing] = useState(false);
   const [startPointId, setStartPointId] = useState(null);
@@ -472,6 +487,23 @@ function CompleteTask() {
             ))}
           </div>
         </Xwrapper>
+        <button className="toggle-right-panel-btn" onClick={toggleRightPanel}>
+          {isRightPanelVisible ? ">>" : "<<"}
+        </button>
+
+        <div className={`right-panel ${!isRightPanelVisible ? 'hidden' : ''}`}>
+          {isRightPanelVisible && currentTaskData.length > 0 && (
+            <>
+              <br/><br/>
+              <h3>{currentTaskData[0].name}</h3>
+              <p>{currentTaskData[0].description}</p>
+            </>
+          )}
+        </div>
+        <div className="always-visible-panel">
+        <div className="timer">Time left: {formatTime(timeLeft)}</div>
+        <button className="submit-btn" onClick={SubmitTask}>Submit task</button>
+      </div>
       </div>
 
       {contextMenu.visible && (
