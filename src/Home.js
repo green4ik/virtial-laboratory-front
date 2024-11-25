@@ -168,36 +168,98 @@ function Home({tasks}) {
           </div>
         {/* </div> */}
 
-        {/* Dynamic Content */}
-        <div className="tasks-container">
-          {currentData.length > 0 ? (
-            currentData.map(item => (
-              <div
-                className={`task-card ${selectedTask && selectedTask.id === item.id ? 'selected-task' : ''}`}
-                key={item.id}
-                onClick={() => setSelectedTask(item)}
-              >
-                <span className="task-name">{item.name}</span>
-                <div className="task-details">
-                  {activeTab === 'tasks' ? (
-                    item.isDone ? (
-                      <span className="task-status">Done!</span>
-                    ) : (
-                      <span className="task-deadline">Up to: {formatDate(item.deadline)}</span>
-                    )
-                  ) : (
-                    <div className="mark-circle">
-                      <strong>{item.mark}</strong>
-                    </div>
-                  )}
-                  <img src={list} alt="list" className="illustration" />
+{/* 
+        const maxMark = rate.maxGrade || 10; // Use task-specific maxMark, default to 10
+          const range = maxMark / 4; // Calculate range dynamically for each task
+
+          // Determine the grade and the color class
+          const grade = rate.grade; // Grade is only relevant if the task is done
+          const moreThen100 = rate.grade >= 100
+            ? 'task-mark100'
+            : 'task-mark';
+
+          const markClass =
+            rate.grade > maxMark - range
+              ? 'mark-circle-green' // Top range (green)
+              : rate.grade > maxMark - 2 * range
+              ? 'mark-circle-yellow' // Second range (yellow)
+              : rate.grade > maxMark - 3 * range
+              ? 'mark-circle-orange' // Third range (orange)
+              : rate.grade > 0
+              ? 'mark-circle-red' // Fourth range (red)
+              : 'mark-circle-dark-red';
+
+          return (
+            <div
+              className={task-card ${selectedTask && selectedTask.id === rate.id ? 'selected-task' : ''}}
+              key={rate.id}
+              onClick={() => setSelectedTask(rate)}
+            >
+              <span className="task-name">{rate.name}</span>
+              <div className="task-details">
+                <div className={mark-circle ${markClass}}>
+                  <span className={${moreThen100}}>
+                    <strong>{grade}</strong>
+                  </span>
                 </div>
+                <img src={list} alt="list" className="illustration" />
               </div>
-            ))
-          ) : (
-            <p>No {activeTab === 'tasks' ? 'tasks' : 'grades'} available</p>
-          )}
+            </div>
+          );
+        })}
+        </div> */}
+
+
+        {/* Dynamic Content */}
+       <div className="tasks-container">
+  {currentData.length > 0 ? (
+    currentData.map(item => {
+      const maxMark = item.maxGrade || 10; // Use task-specific maxMark, default to 10
+      const range = maxMark / 4; // Calculate range dynamically for each task
+      const grade = item.grade; // Grade is only relevant if the task is done
+      const moreThen100 = grade >= 100 ? 'task-mark100' : 'task-mark';
+
+      const markClass =
+        grade > maxMark - range
+          ? 'mark-circle-green' // Top range (green)
+          : grade > maxMark - 2 * range
+          ? 'mark-circle-yellow' // Second range (yellow)
+          : grade > maxMark - 3 * range
+          ? 'mark-circle-orange' // Third range (orange)
+          : grade > 0
+          ? 'mark-circle-red' // Fourth range (red)
+          : 'mark-circle-dark-red';
+
+      return (
+        <div
+          className={`task-card ${selectedTask && selectedTask.id === item.id ? 'selected-task' : ''}`}
+          key={item.id}
+          onClick={() => setSelectedTask(item)}
+        >
+          <span className="task-name">{item.name}</span>
+          <div className="task-details">
+            {activeTab === 'tasks' ? (
+              item.isDone ? (
+                <span className="task-status">Done!</span>
+              ) : (
+                <span className="task-deadline">Up to: {formatDate(item.deadline)}</span>
+              )
+            ) : (
+              <div className={`mark-circle ${markClass}`}>
+                <span className={moreThen100}>
+                  <strong>{grade}</strong>
+                </span>
+              </div>
+            )}
+            <img src={list} alt="list" className="illustration" />
+          </div>
         </div>
+      );
+    })
+  ) : (
+    <p>No {activeTab === 'tasks' ? 'tasks' : 'grades'} available</p>
+  )}
+</div>
 
         {/* Pagination */}
         <div className='pagination-block'>

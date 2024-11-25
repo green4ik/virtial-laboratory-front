@@ -14,7 +14,10 @@ function CompleteTask() {
   const [classes, setClasses] = useState([]);
   const [isRightPanelVisible, setIsRightPanelVisible] = useState(true);
 
-  const [connections, setConnections] = useState([]);
+  const [connections, setConnections] = useState(() => {
+    const savedConnections = localStorage.getItem("umlConnections");
+    return savedConnections ? JSON.parse(savedConnections) : [];
+  });
   const [isDrawing, setIsDrawing] = useState(false);
   const [startPointId, setStartPointId] = useState(null);
   const [blockStartPointId, setBlockStartPointId] = useState(null);
@@ -32,6 +35,10 @@ function CompleteTask() {
     localStorage.setItem("umlBlocks", JSON.stringify(umlBlocks));
   }, [umlBlocks]);
 
+  useEffect(() => {
+    // Save UML blocks to localStorage whenever they change
+    localStorage.setItem("umlConnections", JSON.stringify(connections));
+  }, [connections]);
   const umlPanelRef = useRef(null);
 
 
@@ -102,6 +109,17 @@ function CompleteTask() {
     e.dataTransfer.setData(
       "application/json",
       JSON.stringify({ type, item, sourceBlockId })
+    );
+  };
+
+  const handleDragStop = (e, data, blockId) => {
+    // Update the position of the dragged block
+    setUmlBlocks((prevBlocks) =>
+      prevBlocks.map((block) =>
+        block.id === blockId
+          ? { ...block, x: data.x, y: data.y }
+          : block
+      )
     );
   };
 
@@ -176,11 +194,40 @@ function CompleteTask() {
   
   // Clear the timer from localStorage when task is submitted
   const SubmitTask = () => {
+    submitDiagram();
     localStorage.removeItem("timeLeft");
+    localStorage.removeItem("umlConnections");
+    localStorage.removeItem("umlBlocks");
     console.log("Task is submitted.");
     alert("Task was submitted.");
     navigate("/home");
   };
+
+
+  const submitDiagram = async () => {
+    const diagramData = generateUmlJson();
+  
+    try {
+      const response = await fetch("https://localhost:7217/api/Diagram", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(diagramData),
+      });
+  
+      if (response.ok) {
+        alert("Diagram submitted successfully!");
+        navigate("/home"); // Redirect after submission
+      } else {
+        alert("Failed to submit diagram.");
+      }
+    } catch (error) {
+      console.error("Error submitting diagram:", error);
+      alert("Error submitting diagram.");
+    }
+  };
+
 
   // Format time to mm:ss
   const formatTime = (time) => {
@@ -320,17 +367,19 @@ function CompleteTask() {
     console.log("UML Blocks:", umlBlocks);
     console.log("Connections:", connections);
     return {
-      id: 1,
+      id: task.diagramId,
       classes: umlBlocks.map((block) => ({
-        id : block.id,
-        name: block.title || "Unnamed",
+        Name: block.title || "Unnamed", // 'Name' is used instead of 'name'
         attributes: block.attributes,
         methods: block.methods,
         relatedClasses: connections
-          .filter((conn) => conn.bstart == block.id)
-          .map((conn) => ({
-            [umlBlocks.find((block)=>(block.id == conn.bend)).title]: conn.label,               // Тип зв'язку
-          })),
+          .filter((conn) => conn.bstart === block.id)
+          .map((conn) => {
+            const relatedBlock = umlBlocks.find((block) => block.id === conn.bend);
+            return relatedBlock
+              ? { [relatedBlock.title || ""]: conn.label }
+              : {}; // Filter to find related classes and their relationship type
+          }),
       })),
     };
   };
@@ -419,7 +468,8 @@ function CompleteTask() {
                 handle=".drag-handle"
                 bounds="div.uml-panel"
                 onDrag={updateXarrow} 
-                onStop={updateXarrow}
+                position={{ x: block.x || 0, y: block.y || 0 }}
+                onStop={(e, data) => handleDragStop(e, data, block.id)}
               >
                 <div
                   className="uml-block"
