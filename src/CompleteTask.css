@@ -1,3 +1,6 @@
+* {
+  user-select: none;
+}
 .complete-task-body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -10,6 +13,7 @@
       background-repeat: no-repeat;
       background-position: center;
       min-height: 100vh;
+      z-index: -2;
   }
   .container {
     display: flex;
@@ -107,25 +111,31 @@
     text-align: center;
     border: 1px solid #ddd;
     border-radius: 5px;
-    position: absolute;
+    position: relative;
+    z-index: 8;
   }
   .uml-block:hover {
     cursor: pointer;
+    z-index: 8;
   }
   .uml-block:hover:active {
     cursor: move;
-    z-index: 10;
+    z-index: 8;
   }
   .class-title {
     font-weight: bold;
     font-size: 18px;
-    background-color: #f0f0f0;
+    /* background-color: #f0f0f0; */
     padding: 10px;
+    z-index: 8;
   }
   
   .class-attributes,
   .class-methods {
     padding: 10px;
+    text-align: left;
+    border-top: 1px solid black;
+    z-index: 8;
   }
   
   .right-panel {
@@ -182,7 +192,7 @@
   
   .always-visible-panel {
     position: fixed;
-    z-index: 1000;
+    z-index: 2;
     height: 98%;
     top: 20px; /* Position timer 20px from top */
     right: 20px; /* Position both elements 20px from the right */
@@ -201,6 +211,7 @@
   
   .submit-btn {
     background-color: orange;
+    z-index: 10;
     color: white;
     border: none;
     padding: 10px;
@@ -214,5 +225,133 @@
   
   .submit-btn:hover {
     background-color: #ff7f00;
+    cursor: pointer;
   }
+  
+  .context-menu {
+    position: absolute;
+    background-color: transparent;
+    border: 1px solid black;
+    border: 1px solid #ccc;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    border-radius: 5px;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* gap: 0.3vh; */
+  }
+  
+  .context-menu button {
+    background-color: #ff5757;
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 14px;
+    /* width: 100%; */
+  }
+  
+  .context-menu button:hover {
+    background-color: #ff4040;
+  }
+  .placeholder {
+    color: #aaa;
+    font-style: italic;
+    padding: 5px;
+    text-align: center;
+    background-color: #f3f3f3;
+    border: 1px dashed #ccc;
+    border-radius: 5px;
+    z-index: 8;
+  }
+  .drag-handle {
+    z-index: 8;
+  }
+  .points {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: space-between;
+    pointer-events: none;
+  }
+  
+  .point {
+    width: 10px; /* Розмір точок */
+    height: 10px;
+    background-color: black;
+    border-radius: 50%;
+    pointer-events: all;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); /* Тінь для точок */
+  }
+  
+  .top {
+    position: absolute;
+    top: -5px; /* Зміщення на середині верхньої грані */
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  
+  .left {
+    position: absolute;
+    left: -5px; /* Зміщення на середині лівої грані */
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  
+  .bottom {
+    position: absolute;
+    bottom: -5px; /* Зміщення на середині нижньої грані */
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  
+  .right {
+    position: absolute;
+    right: -5px; /* Зміщення на середині правої грані */
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  .uml-panel {
+    position: relative;
+    z-index: 4;
+    
+  }
+  .uml-block .points {
+    visibility: hidden;
+    position: absolute;
+    z-index: 8;
+  }
+  .uml-block:hover .points {
+    visibility: visible;
+  }
+  
+  .uml-panel-svg {
+    z-index: 0;
+    position: absolute;
+  }
+  
+  .uml-block {
+    position: absolute;
+  }
+  .arrow-buttons {
+    padding-bottom:0.3vh;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3vh;
+  }
+  .arrow-buttons button {
+    background-color: #FF9F67;
+  }
+  .arrow-buttons button:hover {
+    background-color: white;
+    color: #FF9F67;
+  }
+  
   
