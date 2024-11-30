@@ -1,0 +1,336 @@
+/* General Container Styling */
+.App-header {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px;
+    gap: 20px;
+    min-height: 100vh;
+    width: 50%;
+    font-family: 'Mulish', sans-serif;
+    margin-left: 5%; /* Shifts it by 10% of the screen width */
+}
+
+
+/* Header */
+.user-heading {
+    font-size: 2.5rem;
+    color: white;
+    margin: 0;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* Search Bar */
+.search-bar {
+    display: flex;
+    align-items: center;
+    background: white;
+    border-radius: 25px;
+    padding: 5px 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    width: 35%;
+    max-width: 600px;
+    height: 2%;
+}
+
+.search-input {
+    border: none;
+    outline: none;
+    width: 100%;
+    font-size: 1rem;
+    color: black;
+}
+
+.search-button {
+    background: none; /* Removes background */
+    border: none; /* Removes border */
+    cursor: pointer; /* Keeps the pointer style */
+    padding: 0; /* Removes extra padding */
+    display: flex; /* Ensures alignment */
+    align-items: center;
+    justify-content: center;
+}
+
+.search-button img:hover {
+    transform: scale(1.2);
+}
+
+.search-button img {
+    width: 50px;
+}
+
+/* Links for Tasks/Rates */
+.links {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.tasks-link, .rates-link {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: lightgray;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+.tasks-link.active, .rates-link.active {
+    color: #ff9f67;
+    text-decoration: underline;
+}
+
+/* Tasks/Rates Container */
+.tasks-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 75%;
+    max-width: 600px;
+    min-height: 300px;
+    justify-content: flex-start;
+}
+
+.task-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    color: black;
+    font-size: 1.5rem;
+    padding: 15px;
+    border-radius: 15px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+.tasks-container :hover{
+    transform: scale(1.05);
+}
+
+.task-card.selected-task {
+    border: 2px solid #ff9f67; /* Highlight border */
+    transform: scale(1.05); /* Slightly larger to emphasize */
+    box-shadow: 0px 4px 10px rgba(255, 159, 103, 0.4); /* Glow effect */
+    cursor: pointer;
+}
+
+.task-name {
+    flex: 2; /* Takes up more space */
+    text-align: left;
+}
+
+.task-details {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end; /* Aligns content to the end */
+    gap: 10px;
+    flex: 1; /* Takes up less space */
+    text-align: right;
+}
+
+.task-deadline{
+    white-space: nowrap; /* Prevents text wrapping */
+    text-align: right;
+    /* min-width: 150px; Ensures consistent width for alignment */
+}
+
+
+.illustration {
+    width: 30px;
+    height: 30px;
+}
+
+.pagination-block{
+    display: flex;
+    justify-content: center;
+    width: 75%; /* Ensure it spans the full width of its container */
+    margin-top: 20px;
+}
+
+/* Pagination */
+.pagination {
+    display: flex;
+    
+    gap: 10px;
+    /* margin-left:17%; */
+}
+
+.pagination button {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 1px solid gray;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.pagination button:hover {
+    transform: scale(1.1);
+}
+.pagination button:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.active-page {
+    background-color: #ff9f67;
+    color: white;
+    font-weight: bold;
+    transform: scale(1.1);
+}
+/* Task Details Panel */
+.task-details-panel {
+    position: absolute;
+    top: 20%;
+    right: 3%;
+    background: white;
+    border-radius: 20px;
+    padding: 20px;
+    width: 45%;
+    height: 60%;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    color: black;
+    z-index: 1000;
+    color: black;
+    text-align: left;
+    font-size: 12px;
+}
+
+.task-details-panel img {
+    position: absolute; /* Position the image relative to the panel */
+    bottom: 20px;          /* Adjust spacing */
+    right: auto;        /* Keep it on the right */
+    width: 100px;       /* Set a fixed width */
+    height: auto;       /* Maintain aspect ratio */
+}
+
+.task-details-panel strong{
+    font-size: 16px;
+}
+
+.task-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .task-header h2 {
+    font-size: 1.8rem;
+    color: #4a4a4a;
+    margin: 0;
+  }
+  
+  .task-header p {
+    font-size: 1rem;
+    color: #777;
+  }
+
+/* Expiry Date */
+.task-details-panel .task-expiry {
+    text-align: right;
+    color: gray;
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+}
+
+/* Image Styling */
+.task-details-panel img {
+    width: 100%;
+    max-width: 300px;
+    align-self: center;
+}
+
+/* Button Container */
+.task-button-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto; /* Pushes it to the bottom */
+}
+
+.start-task-button {
+    background-color: #ff9f67;
+    border: 1px solid  #ff9f67;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.start-task-button:hover {
+    background-color: #ffffff;
+    color: #ff9f67;
+    border: 2px solid  #ff9f67;
+}
+
+.close-button {
+    background: none;
+    border: none;
+    font-size: 1rem;
+    color: gray;
+    cursor: pointer;
+}
+
+.close-button:hover {
+    color: black;
+}
+
+.task-mark {
+    white-space: nowrap; /* Prevents text wrapping */
+    text-align: right;
+    margin: auto;
+}
+
+.task-mark100 {
+    display: flex; /* Enables flexbox */
+    justify-content: center; /* Centers content horizontally */
+    align-items: center; /* Centers content vertically */
+    white-space: nowrap; /* Prevents text wrapping */
+    text-align: center; /* Ensures text alignment */
+    margin: auto;
+    font-size: 13px;
+    padding: 2px; /* Optional: Adds some spacing inside */
+}
+
+
+.task-comment {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border-left: 4px solid #007bff;
+    font-style: italic;
+  }
+  
+
+.mark-circle{
+    border: none;
+    border-radius: 50px;
+    width: 20px;
+    height: 20px;
+    font-size: 17px;
+    text-align: center;
+    padding: 5px 5px ;
+}
+
+.mark-circle-green{
+    background-color: rgba(0, 255, 0, 0.813);
+}
+.mark-circle-yellow{
+    background-color: rgba(251, 255, 0, 0.813);
+}
+.mark-circle-orange{
+    background-color: rgba(255, 174, 0, 0.813);
+}
+.mark-circle-red{
+    background-color: rgba(252, 0, 0, 0.813);
+}
+.mark-circle-darkred{
+    background-color: rgba(155, 3, 3, 0.813);
+}

@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./CompleteTask.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import LeftPanelVaribales from "./LeftPanelVariables";
 import LeftPanelMethods from "./LeftPanelMethods";
 import LeftPanelClasses from "./LeftPannelClasses";
@@ -9,19 +9,41 @@ import {ReactComponent as AggregationArrow} from "./assets/aggregation-head.svg"
 import  Xarrow, {Xwrapper,useXarrow} from "react-xarrows";
 
 function CompleteTask() {
-  const [variables, setVariables] = useState(["Var1", "Var2", "Var3"]);
-  const [methods, setMethods] = useState(["Method1", "Method2", "Method3"]);
-  const [classes, setClasses] = useState(["Class1", "Class2", "Class3"]);
+  const [variables, setVariables] = useState([]);
+  const [methods, setMethods] = useState([]);
+  const [classes, setClasses] = useState([]);
   const [isRightPanelVisible, setIsRightPanelVisible] = useState(true);
 
-  const [connections, setConnections] = useState([]);
+  const [connections, setConnections] = useState(() => {
+    const savedConnections = localStorage.getItem("umlConnections");
+    return savedConnections ? JSON.parse(savedConnections) : [];
+  });
   const [isDrawing, setIsDrawing] = useState(false);
   const [startPointId, setStartPointId] = useState(null);
   const [blockStartPointId, setBlockStartPointId] = useState(null);
   const [anchorPoint, setAnchorPoint] = useState(null);
   const [activePanel, setActivePanel] = useState("Variables");
-  const [umlBlocks, setUmlBlocks] = useState([]);
+
+  const [umlBlocks, setUmlBlocks] = useState(() => {
+    // Retrieve saved UML blocks from localStorage or initialize as empty array
+    const savedBlocks = localStorage.getItem("umlBlocks");
+    return savedBlocks ? JSON.parse(savedBlocks) : [];
+  });
+  
+    useEffect(() => {
+    // Save UML blocks to localStorage whenever they change
+    localStorage.setItem("umlBlocks", JSON.stringify(umlBlocks));
+  }, [umlBlocks]);
+
+  useEffect(() => {
+    // Save UML blocks to localStorage whenever they change
+    localStorage.setItem("umlConnections", JSON.stringify(connections));
+  }, [connections]);
   const umlPanelRef = useRef(null);
+
+
+  const location = useLocation();
+  const { task } = location.state;
 
   const [contextMenu, setContextMenu] = useState({
     visible: false,
@@ -31,47 +53,51 @@ function CompleteTask() {
     subItem: null,
     in: 1
   });
+  
   const navigate = useNavigate();
- 
-  useEffect(() => {
-    // Функція для отримання даних з API
-    const fetchData = async () => {
-      try {
-        const response = await fetch("https://localhost:7217/api/StarterDiagram/1");
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
 
-        // Оновлення станів на основі отриманих даних
-        setVariables(data.attributes || []);
-        setMethods(data.methods || []);
-        setClasses(data.classNames || []);
+
+  useEffect(() => {
+    const fetchDiagram = async () => {
+      try {
+        const response = await fetch(
+          `https://localhost:7217/api/StarterDiagram/${task.diagramId}`
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch diagram data");
+        }
+        const diagram = await response.json();
+        // Update the states with fetched diagram data
+        setVariables(diagram.attributes || []);
+        setMethods(diagram.methods || []);
+        setClasses(diagram.classNames || []);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching diagram data:", error);
       }
     };
 
-    fetchData(); // Викликаємо функцію
-  }, []);
-  const currentTaskData = [
-    {
-      id: 1,
-      name: 'Make UML',
-      deadline: '01.12.2024',
-      maxMark: 10,
-      description: 'This is a first task to get introduced with UML modeling of different things with some random description in it to not leave empty space and fill this page with text to demonstrate this to everyone.',
-      timeToComplete: 30,
-      studentId: 101, 
-      isDone: false,
-      mark: null, 
-      comment: 'Good effort, but needs improvement in diagram accuracy.',
-    },
-  ];
+    fetchDiagram();
+  }, [task.diagramId]);
   
-  
+  // [
+  //   {
+  //     id: 1,
+  //     name: 'Make UML',
+  //     deadline: '01.12.2024',
+  //     maxMark: 10,
+  //     description: 'This is a first task to get introduced with UML modeling of different things with some random description in it to not leave empty space and fill this page with text to demonstrate this to everyone.',
+  //     timeToComplete: 30,
+  //     studentId: 101, 
+  //     isDone: false,
+  //     mark: null, 
+  //     comment: 'Good effort, but needs improvement in diagram accuracy.',
+  //   },
+  // ];
+
+    
   const block = umlBlocks.find((b) => b.id === contextMenu.blockId);
   const updateXarrow = useXarrow();
+
   const addNewBlock = () => {
     setUmlBlocks([
       ...umlBlocks,
@@ -83,6 +109,17 @@ function CompleteTask() {
     e.dataTransfer.setData(
       "application/json",
       JSON.stringify({ type, item, sourceBlockId })
+    );
+  };
+
+  const handleDragStop = (e, data, blockId) => {
+    // Update the position of the dragged block
+    setUmlBlocks((prevBlocks) =>
+      prevBlocks.map((block) =>
+        block.id === blockId
+          ? { ...block, x: data.x, y: data.y }
+          : block
+      )
     );
   };
 
@@ -131,12 +168,18 @@ function CompleteTask() {
   };
 
   // Timer state
-  const [timeLeft, setTimeLeft] = useState(
-    parseInt(currentTaskData[0].timeToComplete) * 60 // Convert minutes to seconds
-  );
-
+  const [timeLeft, setTimeLeft] = useState(() => {
+    // Retrieve the timer value from localStorage or initialize it
+    const savedTime = localStorage.getItem("timeLeft");
+    return savedTime ? parseInt(savedTime, 10) : parseInt(task.durationTime) * 60; // Default to task duration in seconds
+  });
+  
   // Timer countdown logic
   useEffect(() => {
+    // Save the timeLeft to localStorage whenever it changes
+    localStorage.setItem("timeLeft", timeLeft);
+  
+    // Timer countdown logic
     if (timeLeft > 0) {
       const timer = setInterval(() => {
         setTimeLeft((prevTime) => prevTime - 1);
@@ -148,12 +191,43 @@ function CompleteTask() {
       SubmitTask();
     }
   }, [timeLeft]);
-
+  
+  // Clear the timer from localStorage when task is submitted
   const SubmitTask = () => {
+    submitDiagram();
+    localStorage.removeItem("timeLeft");
+    localStorage.removeItem("umlConnections");
+    localStorage.removeItem("umlBlocks");
     console.log("Task is submitted.");
-      alert("Task was automatically submitted because time is up.");
-      navigate("/home");
+    alert("Task was submitted.");
+    navigate("/home");
   };
+
+
+  const submitDiagram = async () => {
+    const diagramData = generateUmlJson();
+  
+    try {
+      const response = await fetch("https://localhost:7217/api/Diagram", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(diagramData),
+      });
+  
+      if (response.ok) {
+        alert("Diagram submitted successfully!");
+        navigate("/home"); // Redirect after submission
+      } else {
+        alert("Failed to submit diagram.");
+      }
+    } catch (error) {
+      console.error("Error submitting diagram:", error);
+      alert("Error submitting diagram.");
+    }
+  };
+
 
   // Format time to mm:ss
   const formatTime = (time) => {
@@ -293,17 +367,19 @@ function CompleteTask() {
     console.log("UML Blocks:", umlBlocks);
     console.log("Connections:", connections);
     return {
-      id: 1,
+      id: task.diagramId,
       classes: umlBlocks.map((block) => ({
-        id : block.id,
-        name: block.title || "Unnamed",
+        Name: block.title || "Unnamed", // 'Name' is used instead of 'name'
         attributes: block.attributes,
         methods: block.methods,
         relatedClasses: connections
-          .filter((conn) => conn.bstart == block.id)
-          .map((conn) => ({
-            [umlBlocks.find((block)=>(block.id == conn.bend)).title]: conn.label,               // Тип зв'язку
-          })),
+          .filter((conn) => conn.bstart === block.id)
+          .map((conn) => {
+            const relatedBlock = umlBlocks.find((block) => block.id === conn.bend);
+            return relatedBlock
+              ? { [relatedBlock.title || ""]: conn.label }
+              : {}; // Filter to find related classes and their relationship type
+          }),
       })),
     };
   };
@@ -392,7 +468,8 @@ function CompleteTask() {
                 handle=".drag-handle"
                 bounds="div.uml-panel"
                 onDrag={updateXarrow} 
-                onStop={updateXarrow}
+                position={{ x: block.x || 0, y: block.y || 0 }}
+                onStop={(e, data) => handleDragStop(e, data, block.id)}
               >
                 <div
                   className="uml-block"
@@ -544,11 +621,11 @@ function CompleteTask() {
         </button>
 
         <div className={`right-panel ${!isRightPanelVisible ? 'hidden' : ''}`}>
-          {isRightPanelVisible && currentTaskData.length > 0 && (
+          {isRightPanelVisible && (
             <>
               <br/><br/>
-              <h3>{currentTaskData[0].name}</h3>
-              <p>{currentTaskData[0].description}</p>
+              <h3>{task.name}</h3>
+              <p>{task.description}</p>
               <button className="submit-btn" onClick={SubmitTask}>Submit task</button>
             </>
           )}
