@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from "react";
 import './App.css';
 import './Home.css';
 import "@fontsource/mulish";
@@ -13,17 +13,21 @@ function Home({tasks}) {
   const [activeTab, setActiveTab] = useState('tasks'); // Default to 'tasks'
   const [selectedTask, setSelectedTask] = useState(null); // Track selected task
   const [currentPage, setCurrentPage] = useState(1); // Track the current page
-  const [taskData, setTaskData] = useState([]); // Store fetched task data
+  const [taskData, setTaskData] = useState([]);
+  const user = JSON.parse(localStorage.getItem("user"));
   const [isLoading, setIsLoading] = useState(true); // Track loading state
   const [error, setError] = useState(null); // Track error state
+  
 
   const tasksPerPage = 4;
 
   useEffect(() => {
+    if (!user) return;
+
     const fetchTaskData = async () => {
       setIsLoading(true);
       try {
-        const response = await fetch('https://localhost:7217/api/Task/byStudentId/3');
+        const response = await fetch(`https://localhost:7217/api/Task/byStudentId/${user.id}`);
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
@@ -138,7 +142,7 @@ function Home({tasks}) {
     <div className="App">
       <div className="App-header">
         {/* <div> */}
-          <p className="user-heading">Hello, student User1!</p>
+          <p className="user-heading">Hello, {user?.username || "User"}!</p>
 
           {/* Tasks / Rates selection */}
           <div className="links">

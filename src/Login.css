@@ -1,0 +1,120 @@
+.login-container {
+    display: flex;
+    align-items: center;
+    height: 100vh;
+    font-family: "Mulish";
+    padding-left: 150px; /* Ensure space from the page's left side */
+  }
+  
+  .login-box {
+    position: relative;
+    background: rgba(255, 255, 255, 0.1); /* Semi-transparent background */
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    width: 300px;
+    height: 500px;
+    text-align: center;
+    border: 2px solid #ffffff;
+  }
+  
+  .login-title {
+    font-size: 30px;
+    margin-bottom: 20px;
+    color: #ffffff;
+  }
+  
+  .login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .login-label {
+    font-size: 18px;
+    color: #ffffff;
+    text-align: left;
+  }
+  
+  .login-input {
+    padding: 15px;
+    border: 1px solid #ffffff;
+    border-radius: 5px;
+    font-size: 16px;
+    background: transparent;
+    color: #ffffff;
+  }
+  
+  .login-input::placeholder {
+    color: rgba(255, 255, 255, 0.7); /* Lighter placeholder text */
+  }
+  
+  .login-buttons {
+    position: absolute;
+    bottom: 75px; /* Place buttons at the bottom of the box */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .back-button,
+  .submit-button {
+    width: 48%; /* Adjust width for buttons to fit side-by-side */
+    padding: 10px 15px;
+    font-size: 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .back-button {
+    background-color: transparent;
+    color: #ffffff;
+    border: 2px solid #ffffff;
+  }
+  
+  .back-button:hover {
+    background-color: white;
+    color: #ff9f67;
+  }
+  
+  .submit-button {
+    background-color: #ff9f67;
+    color: white;
+    font-weight: bold;
+  }
+  
+  .submit-button:hover {
+    background-color: white;
+    color: #ff9f67;
+  }
+  
+  .signup-prompt {
+    position: absolute;
+    bottom: 10px; /* Place signup prompt below buttons */
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 14px;
+    color: #ffffff;
+    text-align: center;
+  }
+  
+  .signup-link {
+    color: #ff9f43;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  
+  .signup-link:hover {
+    text-decoration: underline;
+  }
+  
+  .error-message {
+    color: #ff0004;
+    font-size: 16px;
+    margin-top: 10px;
+    text-align: left;
+  }
+  
