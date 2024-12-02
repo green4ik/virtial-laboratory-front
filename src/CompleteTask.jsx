@@ -397,9 +397,9 @@ function CompleteTask() {
   return (
     <div className="complete-task-body" onClick={closeContextMenu}>
 
-<button onClick={downloadJson} className="export-json-btn">
+{/* <button onClick={downloadJson} className="export-json-btn">
     Export JSON
-  </button>
+  </button> */}
       <div className="container">
         <div className="left-panel">
           <div className="left-panel-headers">

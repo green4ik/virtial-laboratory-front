@@ -1,0 +1,40 @@
+{
+  "id": 3,
+  "classes": [
+    {
+      "Name": "Product",
+      "attributes": [
+        "Name",
+        "Price",
+        "Stock",
+        "ProductID"
+      ],
+      "methods": [
+        "AddProduct()",
+        "UpdateProduct()",
+        "DeleteProduct()"
+      ],
+      "relatedClasses": []
+    },
+    {
+      "Name": "Category",
+      "attributes": [],
+      "methods": [],
+      "relatedClasses": [
+        {
+          "Product": "Composition"
+        }
+      ]
+    },
+    {
+      "Name": "Supplier",
+      "attributes": [],
+      "methods": [],
+      "relatedClasses": [
+        {
+          "Product": "Association"
+        }
+      ]
+    }
+  ]
+}

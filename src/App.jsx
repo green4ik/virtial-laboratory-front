@@ -5,6 +5,8 @@ import Navbar from './Navbar';
 import CompleteTask from './CompleteTask';
 import { NotFound } from './NotFound';
 import Home from './Home';
+import Login from './Login';
+import UserAccount from './UserAccount';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 
 
@@ -24,6 +26,8 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path = "/completeTask" element = {<CompleteTask/>} />
             <Route path = "*" element = {<NotFound/>}></Route>
+            <Route path = "/login" element = {<Login/>} />
+            <Route path = "/userAccount" element = {<UserAccount/>} />
           </Routes>
         </div>
       </div>
@@ -47,9 +51,6 @@ function Join() {
   return <h1>Join Page</h1>;
 }
 
-function Login() {
-  return <h1>Login Page</h1>;
-}
 
 // <div >
     //      <Routes>
