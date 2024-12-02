@@ -51,69 +51,7 @@ function Home({tasks}) {
     const year = date.getFullYear();
     return `${day}.${month}.${year}`;
   };
-  // const taskData = [
-  //   {
-  //     id: 1,
-  //     name: 'Make UML',
-  //     deadline: '01.12.2024',
-  //     maxMark: 10,
-  //     description: 'This is a first task to get introduced with UML modeling of different things with some random description in it to not leave empty space and fill this page with text to demonstrate this to everyone.',
-  //     timeToComplete: '2 hours',
-  //     studentId: 101, 
-  //     isDone: true,
-  //     mark: 1, 
-  //     comment: 'Good effort, but needs improvement in diagram accuracy.',
-  //   },
-  //   {
-  //     id: 2,
-  //     name: 'Task 1 Example',
-  //     deadline: '02.12.2024',
-  //     maxMark: 10,
-  //     description: 'Complete the first task example.',
-  //     timeToComplete: '1.5 hours',
-  //     studentId: 102, 
-  //     isDone: true,
-  //     mark: 5, 
-  //   comment: 'Well done! Keep up the good work.',
-  //   },
-  //   {
-  //     id: 3,
-  //     name: 'Another Task',
-  //     deadline: '03.12.2024',
-  //     maxMark: 10,
-  //     description: 'Work on another example task.',
-  //     timeToComplete: '3 hours',
-  //     studentId: 103, 
-  //     isDone: true,
-  //     mark: 7, 
-  //     comment: 'Satisfactory work, but the explanation was a bit unclear.',
-  //   },
-  //   {
-  //     id: 4,
-  //     name: 'One More Task',
-  //     deadline: '04.12.2024',
-  //     maxMark: 10,
-  //     description: 'Finish one more task for practice.',
-  //     timeToComplete: '1 hour',
-  //     studentId: 104,
-  //     isDone: true,
-  //     mark: 8, 
-  //     comment: null,
-  //   },
-  //   {
-  //     id: 5,
-  //     name: 'One More more Task',
-  //     deadline: '05.12.2024',
-  //     maxMark: 10,
-  //     description: 'More task for practice.',
-  //     timeToComplete: '15 hour',
-  //     studentId: 105,
-  //     isDone: false,
-  //     mark: null, 
-  //     comment: null,
-  //   },
-  // ];
-
+  
       // Calculate total pages
       
       const filteredData = activeTab === 'tasks' 
@@ -170,49 +108,6 @@ function Home({tasks}) {
               <img src={search} alt="Search" />
             </button>
           </div>
-        {/* </div> */}
-
-{/* 
-        const maxMark = rate.maxGrade || 10; // Use task-specific maxMark, default to 10
-          const range = maxMark / 4; // Calculate range dynamically for each task
-
-          // Determine the grade and the color class
-          const grade = rate.grade; // Grade is only relevant if the task is done
-          const moreThen100 = rate.grade >= 100
-            ? 'task-mark100'
-            : 'task-mark';
-
-          const markClass =
-            rate.grade > maxMark - range
-              ? 'mark-circle-green' // Top range (green)
-              : rate.grade > maxMark - 2 * range
-              ? 'mark-circle-yellow' // Second range (yellow)
-              : rate.grade > maxMark - 3 * range
-              ? 'mark-circle-orange' // Third range (orange)
-              : rate.grade > 0
-              ? 'mark-circle-red' // Fourth range (red)
-              : 'mark-circle-dark-red';
-
-          return (
-            <div
-              className={task-card ${selectedTask && selectedTask.id === rate.id ? 'selected-task' : ''}}
-              key={rate.id}
-              onClick={() => setSelectedTask(rate)}
-            >
-              <span className="task-name">{rate.name}</span>
-              <div className="task-details">
-                <div className={mark-circle ${markClass}}>
-                  <span className={${moreThen100}}>
-                    <strong>{grade}</strong>
-                  </span>
-                </div>
-                <img src={list} alt="list" className="illustration" />
-              </div>
-            </div>
-          );
-        })}
-        </div> */}
-
 
         {/* Dynamic Content */}
        <div className="tasks-container">
@@ -336,23 +231,3 @@ function Home({tasks}) {
 }
 
 export default Home;
-
-
-
-
-// is done bool, studentid 
-  // const tasks = [
-  //   { id: 1, name: 'Make UML', deadline: '01.12.2024', maxMark: 10, description: 'This is a first task to get introduced with uml modeling of different things with some' + 
-  //                               'random description in it to not leave empty space and fill this page with text to demonstrate this to everyone.', timeToComplete: '2 hours' },
-  //   { id: 2, name: 'Task 1 Example', deadline: '02.12.2024', maxMark: 8, description: 'Complete the first task example.', timeToComplete: '1.5 hours' },
-  //   { id: 3, name: 'Another Task', deadline: '03.12.2024', maxMark: 9, description: 'Work on another example task.', timeToComplete: '3 hours' },
-  //   { id: 4, name: 'One More Task', deadline: '04.12.2024', maxMark: 7, description: 'Finish one more task for practice.', timeToComplete: '1 hour' },
-  // ];
-
-  // //studentid
-  // const rates = [
-  //   { id: 1, name: 'Make UML', mark: 1 },
-  //   { id: 2, name: 'Task 1 Example', mark: 5 },
-  //   { id: 3, name: 'Another Task', mark: 7 },
-  //   { id: 4, name: 'One More Task', mark: 10 },
-  // ];
