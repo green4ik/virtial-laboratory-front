@@ -5,12 +5,17 @@ const TaskButton = ({ task }) => {
   const navigate = useNavigate();
 
   const handleStartTask = () => {
-    // Navigate to `completeTask` and pass task data
-    navigate('/completeTask', { state: { task } });
+    if (!task.isDone) {
+      navigate('/completeTask', { state: { task } });
+    }
   };
 
   return (
-    <button onClick={handleStartTask} className="start-task-button">
+    <button  
+    onClick={handleStartTask}
+    className={`start-task-button ${task.isDone ? 'disabled' : ''}`} 
+    disabled={task.isDone} 
+    >
       Start Task
     </button>
   );

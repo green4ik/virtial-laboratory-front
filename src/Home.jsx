@@ -1,23 +1,25 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import './App.css';
 import './Home.css';
 import "@fontsource/mulish";
 import list from './images/list.png';
 import search from './images/search.png';
 import lines from './images/lines.png';
+import atoz from "./images/from-a-to-z.png"
 import taskimg from './images/task-img.png';
 import TaskButton from './TaskButton';
 import { Link } from 'react-router-dom';
 
-function Home({tasks}) {
+function Home({ tasks }) {
   const [activeTab, setActiveTab] = useState('tasks'); // Default to 'tasks'
   const [selectedTask, setSelectedTask] = useState(null); // Track selected task
   const [currentPage, setCurrentPage] = useState(1); // Track the current page
   const [taskData, setTaskData] = useState([]);
+  const [searchQuery, setSearchQuery] = useState(""); // Track search query
+  const [sortOrder, setSortOrder] = useState("asc"); // Track sort order (asc/desc)
   const user = JSON.parse(localStorage.getItem("user"));
   const [isLoading, setIsLoading] = useState(true); // Track loading state
   const [error, setError] = useState(null); // Track error state
-  
 
   const tasksPerPage = 4;
 
@@ -51,117 +53,127 @@ function Home({tasks}) {
     const year = date.getFullYear();
     return `${day}.${month}.${year}`;
   };
-  
-      // Calculate total pages
-      
-      const filteredData = activeTab === 'tasks' 
-      ? taskData 
-      : taskData.filter(task => task.isDone);
 
-    const totalPages = Math.ceil(filteredData.length / tasksPerPage);
+  const filteredData = taskData
+    .filter(task => activeTab === 'tasks' || task.isDone) // Filter by tab
+    .filter(task => task.name.toLowerCase().includes(searchQuery.toLowerCase())) // Filter by search query
+    .sort((a, b) => {
+      if (sortOrder === "asc") {
+        return a.name.localeCompare(b.name);
+      } else {
+        return b.name.localeCompare(a.name);
+      }
+    });
 
-    // Get data for the current page
-    const currentData = filteredData.slice(
-      (currentPage - 1) * tasksPerPage,
-      currentPage * tasksPerPage
-    );
+  const totalPages = Math.ceil(filteredData.length / tasksPerPage);
 
-    // Handle pagination
-    const handlePageChange = (pageNumber) => {
-      setCurrentPage(pageNumber);
-    };
+  const currentData = filteredData.slice(
+    (currentPage - 1) * tasksPerPage,
+    currentPage * tasksPerPage
+  );
 
-    // Reset pagination when switching tabs
-    useEffect(() => {
-      setCurrentPage(1);
-    }, [activeTab]);
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [activeTab, searchQuery, sortOrder]);
 
   return (
     <div className="App">
       <div className="App-header">
-        {/* <div> */}
-          <p className="user-heading">Hello, {user?.username || "User"}!</p>
+        <p className="user-heading">Hello, {user?.username || "User"}!</p>
 
-          {/* Tasks / Rates selection */}
-          <div className="links">
-            <button
-              className={`tasks-link ${activeTab === 'tasks' ? 'active' : ''}`}
-              onClick={() => setActiveTab('tasks')}
-            >
-              Tasks
-            </button>
-            <button
-              className={`rates-link ${activeTab === 'rates' ? 'active' : ''}`}
-              onClick={() => setActiveTab('rates')}
-            >
-              Grades
-            </button>
-          </div>
-
-          {/* Search Bar */}
-          <div className="search-bar">
-            <button className="search-button">
-              <img src={lines} alt="Lines" className="search-lines-icon" />
-            </button>
-            <input type="text" placeholder="Search" className="search-input" />
-            <button className="search-button">
-              <img src={search} alt="Search" />
-            </button>
-          </div>
-
-        {/* Dynamic Content */}
-       <div className="tasks-container">
-  {currentData.length > 0 ? (
-    currentData.map(item => {
-      const maxMark = item.maxGrade || 10; // Use task-specific maxMark, default to 10
-      const range = maxMark / 4; // Calculate range dynamically for each task
-      const grade = item.grade; // Grade is only relevant if the task is done
-      const moreThen100 = grade >= 100 ? 'task-mark100' : 'task-mark';
-
-      const markClass =
-        grade > maxMark - range
-          ? 'mark-circle-green' // Top range (green)
-          : grade > maxMark - 2 * range
-          ? 'mark-circle-yellow' // Second range (yellow)
-          : grade > maxMark - 3 * range
-          ? 'mark-circle-orange' // Third range (orange)
-          : grade > 0
-          ? 'mark-circle-red' // Fourth range (red)
-          : 'mark-circle-dark-red';
-
-      return (
-        <div
-          className={`task-card ${selectedTask && selectedTask.id === item.id ? 'selected-task' : ''}`}
-          key={item.id}
-          onClick={() => setSelectedTask(item)}
-        >
-          <span className="task-name">{item.name}</span>
-          <div className="task-details">
-            {activeTab === 'tasks' ? (
-              item.isDone ? (
-                <span className="task-status">Done!</span>
-              ) : (
-                <span className="task-deadline">Up to: {formatDate(item.deadline)}</span>
-              )
-            ) : (
-              <div className={`mark-circle ${markClass}`}>
-                <span className={moreThen100}>
-                  <strong>{grade}</strong>
-                </span>
-              </div>
-            )}
-            <img src={list} alt="list" className="illustration" />
-          </div>
+        <div className="links">
+          <button
+            className={`tasks-link ${activeTab === 'tasks' ? 'active' : ''}`}
+            onClick={() => setActiveTab('tasks')}
+          >
+            Tasks
+          </button>
+          <button
+            className={`rates-link ${activeTab === 'rates' ? 'active' : ''}`}
+            onClick={() => setActiveTab('rates')}
+          >
+            Grades
+          </button>
         </div>
-      );
-    })
-  ) : (
-    <p>No {activeTab === 'tasks' ? 'tasks' : 'grades'} available</p>
-  )}
-</div>
 
-        {/* Pagination */}
-        <div className='pagination-block'>
+        <div className="search-bar">
+          <button
+            className="search-button"
+            onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
+          >
+            <img src={lines} alt="Sort"/>
+          </button>
+          <input
+            type="text"
+            placeholder="Search"
+            className="search-input"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <button className="search-button">
+            <img src={search} alt="Search" />
+          </button>
+        </div>
+
+        <div className="tasks-container">
+          {currentData.length > 0 ? (
+            currentData.map(item => {
+              const maxMark = item.maxGrade || 10; // Use task-specific maxMark, default to 10
+              const range = maxMark / 4; // Calculate range dynamically for each task
+              const grade = item.grade; // Grade is only relevant if the task is done
+              const moreThen100 = grade >= 100 ? 'task-mark100' : 'task-mark';
+
+              const markClass =
+                grade > maxMark - range
+                  ? 'mark-circle-green'
+                  : grade > maxMark - 2 * range
+                  ? 'mark-circle-yellow'
+                  : grade > maxMark - 3 * range
+                  ? 'mark-circle-orange'
+                  : grade > 0
+                  ? 'mark-circle-red'
+                  : grade ===0 
+                  ?'mark-circle-darkred'
+                  :'';
+
+              return (
+                <div
+                  className={`task-card ${selectedTask && selectedTask.id === item.id ? 'selected-task' : ''}`}
+                  key={item.id}
+                  onClick={() => {
+                    console.log("Selected Task: ", item);
+                    setSelectedTask(item);
+                  }}
+                >
+                  <span className="task-name">{item.name}</span>
+                  <div className="task-details">
+                    {activeTab === 'tasks' ? (
+                      item.isDone ? (
+                        <span className="task-status">Done!</span>
+                      ) : (
+                        <span className="task-deadline">Up to: {formatDate(item.deadline)}</span>
+                      )
+                    ) : (
+                      <div className={`mark-circle ${markClass}`}>
+                        <span className={moreThen100}>
+                          <strong>{grade}</strong>
+                        </span>
+                      </div>
+                    )}
+                    <img src={list} alt="list" className="illustration" />
+                  </div>
+                </div>
+              );
+            })
+          ) : (
+            <p>No {activeTab === 'tasks' ? 'tasks' : 'grades'} available</p>
+          )}
+        </div>
+
         <div className="pagination">
           <button
             onClick={() => handlePageChange(currentPage - 1)}
@@ -174,9 +186,7 @@ function Home({tasks}) {
           {Array.from({ length: totalPages }, (_, index) => (
             <button
               key={index + 1}
-              className={`page-button ${
-                currentPage === index + 1 ? "active-page" : ""
-              }`}
+              className={`page-button ${currentPage === index + 1 ? "active-page" : ""}`}
               onClick={() => handlePageChange(index + 1)}
             >
               {index + 1}
@@ -191,10 +201,7 @@ function Home({tasks}) {
             &gt;
           </button>
         </div>
-        </div>
       </div>
-
-      {/* Task Details */}
       {selectedTask && (
     <div className="task-details-panel">
         <div className='task-header'>
@@ -221,7 +228,6 @@ function Home({tasks}) {
             <button className="close-button" onClick={() => setSelectedTask(null)}>
                 Close
             </button>
-            {/* <button className="start-task-button">Start Task</button> */}
             <TaskButton task={selectedTask} />
         </div>
     </div>

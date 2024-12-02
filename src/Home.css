@@ -336,3 +336,9 @@
 .mark-circle-darkred{
     background-color: rgba(155, 3, 3, 0.813);
 }
+.start-task-button:disabled, 
+.start-task-button.disabled {
+  background-color: #cccccc; /* Сірий колір для неактивної кнопки */
+  cursor: not-allowed;
+  color: #666666; /* Темніший текст для неактивної кнопки */
+}

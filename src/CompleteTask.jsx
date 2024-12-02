@@ -208,7 +208,7 @@ function CompleteTask() {
     const diagramData = generateUmlJson();
   
     try {
-      const response = await fetch("https://localhost:7217/api/Diagram", {
+      const response = await fetch(`https://localhost:7217/api/Diagram/${task.id}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
