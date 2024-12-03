@@ -83,7 +83,7 @@ function CompleteTask() {
         setMethods(diagram.methods || []);
         setClasses(diagram.classNames || []);
 
-        toast('Task has started!');
+        toast('Task has started!', {position: "top-center"});
       } catch (error) {
         console.error("Error fetching diagram data:", error);
       }
@@ -213,7 +213,7 @@ function CompleteTask() {
       const timer = setInterval(() => setTimeLeft((prev) => prev - 1), 1000);
       return () => clearInterval(timer);
     } else if (timeLeft === 0) {
-      alert("Time is up!");
+      toast('Time is up!', {position: "top-center"});
       SubmitTask();
     }
   }, [timeLeft]);
@@ -259,11 +259,11 @@ function CompleteTask() {
       if (response.ok) {
         console.log("Task is submitted.");
       } else {
-        alert("Failed to submit the task.");
+        toast.error("Failed to submit the task.", {position: "top-center"}); 
       }
     } catch (error) {
       console.error("Error submitting the task:", error);
-      alert("Error submitting the task.");
+      toast.error("Error submitting the task.", {position: "top-center"});
     }
   };
 

@@ -19,7 +19,7 @@ function App() {
     
       <div className="App">
          <ToastContainer
-         position="top-center"
+        position="bottom-right"
         />
         
          {location.pathname !== '/completeTask' && <Navbar />}
