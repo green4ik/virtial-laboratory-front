@@ -454,9 +454,7 @@ function CompleteTask() {
   return (
     <div className="complete-task-body" onClick={closeContextMenu}>
 
-{/* <button onClick={downloadJson} className="export-json-btn">
-    Export JSON
-  </button> */}
+
       <div className="container">
         <div className="left-panel">
           <div className="left-panel-headers">
@@ -753,7 +751,10 @@ function CompleteTask() {
           <div className="popup-content">
             <h2>Task Submitted!</h2>
             <p>Grade: {taskData.grade}/{taskData.maxGrade}</p>
-            <button onClick={closePopup}>Close</button>
+            <div className="butts">
+              <button onClick={downloadJson}className="butt" >Export JSON</button>
+              <button onClick={closePopup} className="butt-red">Close</button>
+            </div>
           </div>
         </div>
       )}

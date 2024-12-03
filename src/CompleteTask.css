@@ -377,6 +377,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
     z-index: 1000;
   }
   
@@ -396,13 +397,28 @@
     margin-top: 10px;
     padding: 10px 20px;
     border: none;
-    background: #007bff;
+    /* background: #007bff; */
     color: white;
     border-radius: 5px;
     cursor: pointer;
   }
   
   .popup-content button:hover {
+    /* background: #0056b3; */
+  }
+  .butts {
+    display: flex;
+    gap: 10px;
+  }
+  .butt-red {
+    background: #ff4040;
+  }
+  .butt-red:hover {
+    background:darkred;
+  }
+  .butt {
+    background: #007bff;
+  }
+  .butt:hover {
     background: #0056b3;
   }
-  
