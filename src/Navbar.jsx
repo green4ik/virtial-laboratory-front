@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import './Navbar.css';
 import logo from './images/logo_courses.png';
 import userPic from './images/3d_avatar_8.png';
@@ -14,6 +15,7 @@ function Navbar() {
 
   const handleSignOut = () => {
     localStorage.removeItem('user'); // Remove user data from local storage
+    toast("You logged out!");
     navigate('/login'); // Redirect to login page
   };
 
@@ -72,7 +74,7 @@ function Navbar() {
               </li>
               <li>
                 <Link to="/login" className="login-button">
-                  Login
+                  Log in
                 </Link>
               </li>
             </>

@@ -7,6 +7,10 @@ import { NotFound } from './NotFound';
 import Home from './Home';
 import Login from './Login';
 import UserAccount from './UserAccount';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { toast } from 'react-toastify';
+import Modules from './Modules';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 
 
@@ -15,6 +19,10 @@ function App() {
   return (
     
       <div className="App">
+         <ToastContainer
+        position="bottom-right"
+        />
+        
          {location.pathname !== '/completeTask' && <Navbar />}
         {/* Основний контент, що змінюється */}
         <div className="main-content">
@@ -41,10 +49,6 @@ function Base() {
   return  <div className="main-content">
           <p className="main-heading">Virtual laboratory</p>
           </div>;
-}
-
-function Modules() {
-  return <h1>Modules Page</h1>;
 }
 
 function Join() {

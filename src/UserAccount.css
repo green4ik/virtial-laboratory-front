@@ -3,59 +3,83 @@
   justify-content: center;
   align-items: center;
   height: 100vh;
+  font-family: "Mulish";
 }
 
-.account-header {
-  text-align: center; /* Center text inside the h2 */
-  width: 100%; /* Ensure it spans full width */
-  margin-bottom: 20px; /* Center the text inside the h2 */
-}
 
 .user-account {
-  width: 80%;
-  height: 77%;
-  background-color: #ffffff89;
-  border-radius: 10px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-  padding: 20px;
   display: flex;
-  flex-direction: column; /* Make the layout horizontal */
-  justify-content: flex-start; /* Align content to the start */
-  align-items: center; /* Keep content at the top */
+  width: 90%;
+  height: 80%;
+  /* flex: 1; */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.315);
+  overflow: hidden;
 }
 
-.account-content {
-  display: flex;
-  flex-direction: column; /* Stack header and buttons vertically */
-  align-items: flex-start; /* Align header and buttons to the left */
-  width: 100%; /* Ensure full-width alignment */
-  gap: 3%;
-}
-
-
-.user-account-buttons {
+.user-account-sidebar {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  width: 25%; /* Ensure buttons span the full width */
-  justify-content: flex-start; /* Keep buttons aligned at the top */
-  align-items: flex-start; 
-  height: 100%; /* Ensure the buttons container takes up full height */
-}
-
-.account-button {
-  padding: 10px 20px;
-  font-size: 16px;
-  cursor: pointer;
-  border: none;
-  border-radius: 5px;
+  justify-content: top; /* Centers content vertically */
+  align-items: left; /* Centers content horizontally */
+  width: 16%;
+  padding: 20px;
   background-color: #ff9f43;
-  color: white;
-  width: 80%; /* Set width to 10% */
-  margin: 5px 0; /* Optional: Add some margin between buttons */
+  box-shadow: 2px 0px 10px rgba(0, 0, 0, 0.1);
 }
 
-.account-button:hover {
+.sidebar-button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 15px;
+  font-size: 14px;
+  color: white;
+  border: none;
+  background: none;
+  cursor: pointer;
+  text-align: left;
+  margin-bottom: 10px;
+}
+
+.sidebar-button.active {
   background-color: #ffffff;
   color: #ff9f43;
+}
+
+.user-account-content {
+  flex: 1;
+  padding: 20px;
+  background-color: #f4f4f4;
+}
+
+
+.field-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  color: black;
+  font-size: 1.5rem;
+  padding: 15px;
+  border-radius: 15px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  width: 50%;
+  margin: 20px auto;
+}
+
+.user-account-button{
+  background-color: #ff9f67;
+  border: 1px solid  #ff9f67;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1rem;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.user-account-button:hover {
+  background-color: #ffffff;
+  color: #ff9f67;
+  border: 2px solid  #ff9f67;
 }
