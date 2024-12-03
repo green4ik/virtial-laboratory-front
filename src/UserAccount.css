@@ -51,3 +51,35 @@
   padding: 20px;
   background-color: #f4f4f4;
 }
+
+
+.field-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  color: black;
+  font-size: 1.5rem;
+  padding: 15px;
+  border-radius: 15px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  width: 50%;
+  margin: 20px auto;
+}
+
+.user-account-button{
+  background-color: #ff9f67;
+  border: 1px solid  #ff9f67;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1rem;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.user-account-button:hover {
+  background-color: #ffffff;
+  color: #ff9f67;
+  border: 2px solid  #ff9f67;
+}

@@ -26,7 +26,7 @@ function Login() {
         const data = await response.json();
         localStorage.setItem("user", JSON.stringify(data));
         toast('You are logged in!');
-        navigate("/home");
+        navigate("/modules");
       } else {
         // Check if the response is plain text or JSON
         const isJson = response.headers

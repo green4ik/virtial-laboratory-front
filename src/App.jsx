@@ -10,6 +10,7 @@ import UserAccount from './UserAccount';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { toast } from 'react-toastify';
+import Modules from './Modules';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 
 
@@ -48,10 +49,6 @@ function Base() {
   return  <div className="main-content">
           <p className="main-heading">Virtual laboratory</p>
           </div>;
-}
-
-function Modules() {
-  return <h1>Modules Page</h1>;
 }
 
 function Join() {
