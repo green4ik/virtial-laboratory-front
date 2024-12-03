@@ -5,15 +5,17 @@ import LeftPanelVaribales from "./LeftPanelVariables";
 import LeftPanelMethods from "./LeftPanelMethods";
 import LeftPanelClasses from "./LeftPannelClasses";
 import Draggable from "react-draggable";
-import {ReactComponent as AggregationArrow} from "./assets/aggregation-head.svg"
+
+// import {ReactComponent as AggregationArrow} from "./assets/aggregation-head.svg"
 import  Xarrow, {Xwrapper,useXarrow} from "react-xarrows";
+import { toast } from "react-toastify";
 
 function CompleteTask() {
   const [variables, setVariables] = useState([]);
   const [methods, setMethods] = useState([]);
   const [classes, setClasses] = useState([]);
   const [isRightPanelVisible, setIsRightPanelVisible] = useState(true);
-
+  const [taskData, setTaskData] = useState([]);
   const [connections, setConnections] = useState(() => {
     const savedConnections = localStorage.getItem("umlConnections");
     return savedConnections ? JSON.parse(savedConnections) : [];
@@ -24,6 +26,10 @@ function CompleteTask() {
   const [anchorPoint, setAnchorPoint] = useState(null);
   const [activePanel, setActivePanel] = useState("Variables");
 
+  const [popupVisible, setPopupVisible] = useState(false);
+
+
+  
   const [umlBlocks, setUmlBlocks] = useState(() => {
     // Retrieve saved UML blocks from localStorage or initialize as empty array
     const savedBlocks = localStorage.getItem("umlBlocks");
@@ -56,6 +62,11 @@ function CompleteTask() {
   
   const navigate = useNavigate();
 
+  const closePopup = () => {
+    setPopupVisible(false);
+    navigate("/home"); // Redirect to home
+  };
+
 
   useEffect(() => {
     const fetchDiagram = async () => {
@@ -71,12 +82,14 @@ function CompleteTask() {
         setVariables(diagram.attributes || []);
         setMethods(diagram.methods || []);
         setClasses(diagram.classNames || []);
+
+        toast('Task has started!');
       } catch (error) {
         console.error("Error fetching diagram data:", error);
       }
     };
-
     fetchDiagram();
+
   }, [task.diagramId]);
   
   // [
@@ -167,43 +180,70 @@ function CompleteTask() {
     );
   };
 
+  useEffect(() => {
+    // Reset timer when task changes
+    const savedTaskId = localStorage.getItem("activeTaskId");
+    
+    if (!savedTaskId || savedTaskId !== task.id.toString()) {
+      // New task or returning to this task for the first time
+      setTimeLeft(parseInt(task.durationTime) * 60);
+      localStorage.setItem("activeTaskId", task.id);
+    }
+  }, [task.id]);
+
   // Timer state
   const [timeLeft, setTimeLeft] = useState(() => {
-    // Retrieve the timer value from localStorage or initialize it
+    const savedTaskId = localStorage.getItem("activeTaskId");
     const savedTime = localStorage.getItem("timeLeft");
-    return savedTime ? parseInt(savedTime, 10) : parseInt(task.durationTime) * 60; // Default to task duration in seconds
+  
+    // If the current task is not the active one, reset the timer
+    if (!savedTaskId || savedTaskId !== task.id.toString()) {
+      return parseInt(task.durationTime) * 60; // Default to task duration in seconds
+    }
+  
+    return savedTime ? parseInt(savedTime, 10) : parseInt(task.durationTime) * 60;
   });
+  
   
   // Timer countdown logic
   useEffect(() => {
-    // Save the timeLeft to localStorage whenever it changes
     localStorage.setItem("timeLeft", timeLeft);
   
-    // Timer countdown logic
     if (timeLeft > 0) {
-      const timer = setInterval(() => {
-        setTimeLeft((prevTime) => prevTime - 1);
-      }, 1000);
-      return () => clearInterval(timer); // Clean up on unmount
+      const timer = setInterval(() => setTimeLeft((prev) => prev - 1), 1000);
+      return () => clearInterval(timer);
     } else if (timeLeft === 0) {
-      // Time is up: show popup and submit task
       alert("Time is up!");
       SubmitTask();
     }
   }, [timeLeft]);
   
-  // Clear the timer from localStorage when task is submitted
-  const SubmitTask = () => {
-    submitDiagram();
-    localStorage.removeItem("timeLeft");
-    localStorage.removeItem("umlConnections");
-    localStorage.removeItem("umlBlocks");
-    console.log("Task is submitted.");
-    alert("Task was submitted.");
-    navigate("/home");
+  
+
+  const SubmitTask = async () => {
+    try {
+      // Wait for submitDiagram to complete
+      await submitDiagram();
+      console.log("Diagram submitted successfully.");
+  
+      // Then fetch the updated task data
+      await getUpdatedTask();
+      console.log("Task data updated successfully.");
+      localStorage.removeItem("timeLeft");
+      localStorage.removeItem("umlConnections");
+      localStorage.removeItem("umlBlocks");
+      localStorage.removeItem("activeTaskId"); 
+      // Show the popup with the grade
+      setPopupVisible(true);
+      // Clear localStorage after successful submission
+
+      console.log("Task is submitted, and local storage cleared.");
+    } catch (error) {
+      console.error("Task submission failed:", error);
+    }
   };
 
-
+  // Clear the timer from localStorage when task is submitted
   const submitDiagram = async () => {
     const diagramData = generateUmlJson();
   
@@ -217,14 +257,31 @@ function CompleteTask() {
       });
   
       if (response.ok) {
-        alert("Diagram submitted successfully!");
-        navigate("/home"); // Redirect after submission
+        console.log("Task is submitted.");
       } else {
-        alert("Failed to submit diagram.");
+        alert("Failed to submit the task.");
       }
     } catch (error) {
-      console.error("Error submitting diagram:", error);
-      alert("Error submitting diagram.");
+      console.error("Error submitting the task:", error);
+      alert("Error submitting the task.");
+    }
+  };
+
+  const getUpdatedTask = async () => {
+    // setIsLoading(true);
+    try {
+      const response = await fetch(`https://localhost:7217/api/Task/byId/${task.id}`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const data = await response.json();
+      setTaskData(data);
+      console.log(data);
+    } catch (err) {
+      console.log(err.message);
+      // setError(err.message);
+    } finally {
+      // setIsLoading(false);
     }
   };
 
@@ -691,6 +748,15 @@ function CompleteTask() {
   </div>   
   )}
     
+   {popupVisible && (
+        <div className="popup">
+          <div className="popup-content">
+            <h2>Task Submitted!</h2>
+            <p>Grade: {taskData.grade}/{taskData.maxGrade}</p>
+            <button onClick={closePopup}>Close</button>
+          </div>
+        </div>
+      )}
 
     </div>
   );

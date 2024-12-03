@@ -7,6 +7,9 @@ import { NotFound } from './NotFound';
 import Home from './Home';
 import Login from './Login';
 import UserAccount from './UserAccount';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { toast } from 'react-toastify';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 
 
@@ -15,6 +18,10 @@ function App() {
   return (
     
       <div className="App">
+         <ToastContainer
+         position="top-center"
+        />
+        
          {location.pathname !== '/completeTask' && <Navbar />}
         {/* Основний контент, що змінюється */}
         <div className="main-content">

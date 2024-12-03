@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import "./Login.css";
 
 function Login() {
@@ -24,6 +25,7 @@ function Login() {
       if (response.ok) {
         const data = await response.json();
         localStorage.setItem("user", JSON.stringify(data));
+        toast('You are logged in!');
         navigate("/home");
       } else {
         // Check if the response is plain text or JSON
