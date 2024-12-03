@@ -13,7 +13,7 @@ function Modules() {
 
 
     const handleCardClick = (title) => {
-        if (title === "Модуль моделювання") {
+        if (title === "Modeling Module") {
           navigate("/home"); // Перенаправлення на ./home
         }
       };
@@ -21,12 +21,12 @@ function Modules() {
 
   const navigate = useNavigate(); 
   const cards = [
-    { title: "Модуль аналізу вимог", icon: icon1 },
-    { title: "Модуль проектування", icon: icon2 },
-    { title: "Модуль моделювання", icon:  icon3 },
-    { title: "Модуль конструювання та розробки", icon: icon4  },
-    { title: "Модуль тестування", icon: icon5 },
-    { title: "Модуль аналізу результатів", icon: icon6  },
+    { title: "Requirements Analysis Module", icon: icon1 },
+    { title: "Design Module", icon: icon2 },
+    { title: "Modeling Module", icon: icon3 },
+    { title: "Construction and Development Module", icon: icon4 },
+    { title: "Testing Module", icon: icon5 },
+    { title: "Results Analysis Module", icon: icon6 },
   ];
 
    return (
